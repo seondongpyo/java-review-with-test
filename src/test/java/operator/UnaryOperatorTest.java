@@ -16,7 +16,7 @@ class UnaryOperatorTest {
         assertThat(intValue1).isPositive();
         assertThat(intValue2).isNegative();
         assertThat(intValue1 + intValue2).isPositive();
-        assertThat(intValue1 + intValue2).isNegative();
+        assertThat(intValue1 * intValue2).isNegative();
     }
 
     @Test
