@@ -26,7 +26,9 @@ class BitOperatorTest {
     @Test
     @DisplayName("<< 비트 쉬프트 연산자")
     void signedLeftShiftOperator() {
-        // x << n : x * 2^n (부호에 상관없이 왼쪽으로 이동시키며 빈 칸을 0으로 채움)
+        // x << n : x * 2^n
+        //  - 지정한 수만큼 피연산자의 모든 비트를 전부 왼쪽으로 이동시킴
+        //  - 비트의 이동으로 인해 새로 생기는 오른쪽 비트들은 항상 0으로 채워짐
         printLog("8       = " + getBinaryStringWithBitFormat(8));        // 00001000
         printLog("8 << 1  = " + getBinaryStringWithBitFormat(8 << 1));   // 00010000 => 16 (= 8 * 2^1)
         printLog("8 << 2  = " + getBinaryStringWithBitFormat(8 << 2));   // 00100000 => 32 (= 8 * 2^2)
@@ -40,7 +42,8 @@ class BitOperatorTest {
     @DisplayName(">> 비트 쉬프트 연산자")
     void signedRightShiftOperator() {
         // x >> n : x / 2^n
-        // 양수인 경우 빈 칸을 0으로, 음수인 경우 부호를 유지하기 위해 빈 칸을 1로 채움
+        //  - 지정한 수만큼 피연산자의 모든 비트를 전부 오른쪽으로 이동시킴
+        //  - 비트의 이동으로 인해 새로 생기는 왼쪽 비트들은 양수일 경우 모두 0으로, 음수일 경우 모두 1로 채워짐 (부호가 변하지 않음)
         printLog("8       = " + getBinaryStringWithBitFormat(8));        // 00001000
         printLog("8 >> 1  = " + getBinaryStringWithBitFormat(8 >> 1));   // 00000100 => 4 (= 8 / 2^1)
         printLog("8 >> 2  = " + getBinaryStringWithBitFormat(8 >> 2));   // 00000010 => 2 (= 8 / 2^2)
@@ -71,8 +74,9 @@ class BitOperatorTest {
     @Test
     @DisplayName(">>> 비트 쉬프트 연산자")
     void unsignedRightShiftOperator() {
-        // x >>> n : x * 2^n (부호에 상관없이 항상 빈 칸을 0으로 채움)
-        // n개의 비트는 오른쪽으로 밀려서 버려지고, 맨 왼쪽에는 n개만큼 최상위 부호비트와 동일한 값으로 채워짐
+        // x >>> n : x * 2^n
+        //  - 부호 비트까지 포함하여 모든 비트를 전부 오른쪽으로 이동시킴
+        //  - 비트의 이동으로 인해 새로 생기는 왼쪽 비트들은 부호와 상관 없이 항상 0으로 채워짐
         printLog("16        = " + getBinaryStringWithBitFormat(16));       // 00000000 00000000 00000000 00010000
         printLog("16 >>> 1  = " + getBinaryStringWithBitFormat(16 >>> 1)); // 00000000 00000000 00000000 00001000
         printLog("16 >>> 2  = " + getBinaryStringWithBitFormat(16 >>> 2)); // 00000000 00000000 00000000 00000100
@@ -81,7 +85,7 @@ class BitOperatorTest {
         //    >>> 3 = |   00000 00000000 00000000 00000010|000
         // 16 >>> 3 = |00000000 00000000 00000000 00000010|
         //             +++                                 ---
-        //   (부호에 상관없이 항상 0으로 채움)          (오른쪽으로 밀려서 버려짐)
+        // (부호에 상관 없이 항상 0으로 채움)           (오른쪽으로 밀려서 버려짐)
 
         printLog("-16        = " + getBinaryStringWithBitFormat(-16));       // 11111111 11111111 11111111 11110000
         printLog("-16 >>> 1  = " + getBinaryStringWithBitFormat(-16 >>> 1)); // 01111111 11111111 11111111 11111000
@@ -91,7 +95,7 @@ class BitOperatorTest {
         //     >>> 3 = |   11111 11111111 11111111 11111110|000
         // -16 >>> 3 = |00011111 11111111 11111111 11111110|
         //              +++                                 ---
-        //   (부호에 상관없이 항상 0으로 채움)           (오른쪽으로 밀려서 버려짐)
+        // (부호에 상관 없이 항상 0으로 채움)            (오른쪽으로 밀려서 버려짐)
     }
 
     private void printLog(String log) {
