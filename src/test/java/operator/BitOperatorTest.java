@@ -13,11 +13,13 @@ class BitOperatorTest {
         // & : 이진수로 표현했을 때 양쪽의 값이 모두 1이면 1을, 그 외에는 0을 반환함 (비트 AND 연산)
         // | : 이진수로 표현했을 때 한쪽이라도 값이 1이면 1을, 그 외에는 0을 반환함 (비트 OR 연산)
         // ^ : 이진수로 표현했을 때 서로의 값이 다를 때는 1을, 같을 떄는 0을 반환함 (비트 NOR 연산)
-        printLog("3       = " + getBinaryStringWithBitFormat(3)); // 0011
-        printLog("5       = " + getBinaryStringWithBitFormat(5)); // 0101
-        printLog("3 & 5   = " + getBinaryStringWithBitFormat(3 & 5)); // 0001 => 1
-        printLog("3 | 5   = " + getBinaryStringWithBitFormat(3 | 5)); // 0111 => 7
-        printLog("3 ^ 5   = " + getBinaryStringWithBitFormat(3 ^ 5)); // 0110 => 6
+        // ~ : 비트를 1이면 0으로, 0이면 1로 반전시킴 (비트 NOT 연산, 1의 보수)
+        printLog("3       = " + getBinaryStringWithBitFormat(3));        // 00000000 00000000 00000000 00000011
+        printLog("~3      = " + getBinaryStringWithBitFormat(~3));              // 11111111 11111111 11111111 11111100
+        printLog("5       = " + getBinaryStringWithBitFormat(5));        // 00000000 00000000 00000000 00000101
+        printLog("3 & 5   = " + getBinaryStringWithBitFormat(3 & 5));    // 00000000 00000000 00000000 00000001 => 1
+        printLog("3 | 5   = " + getBinaryStringWithBitFormat(3 | 5));    // 00000000 00000000 00000000 00000111 => 7
+        printLog("3 ^ 5   = " + getBinaryStringWithBitFormat(3 ^ 5));    // 00000000 00000000 00000000 00000110 => 6
         assertThat(3 & 5).isEqualTo(1);
         assertThat(3 | 5).isEqualTo(7);
         assertThat(3 ^ 5).isEqualTo(6);
