@@ -14,10 +14,11 @@ class AssignmentOperatorTest {
 
         assertThat(intValue).isEqualTo(10);
         assertThat(intValue += 10).isEqualTo(20);
-        assertThat(intValue -= 5).isEqualTo(5);
-        assertThat(intValue *= 10).isEqualTo(200);
-        assertThat(intValue /= 5).isEqualTo(40);
-        assertThat(intValue %= 3).isEqualTo(1);
+        assertThat(intValue -= 5).isEqualTo(15);
+        assertThat(intValue *= 10).isEqualTo(150);
+        assertThat(intValue /= 5).isEqualTo(30);
+        assertThat(intValue %= 4).isEqualTo(2);
+        assertThat(intValue).isEqualTo(2);
     }
 
 }
