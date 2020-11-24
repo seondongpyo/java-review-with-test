@@ -137,4 +137,17 @@ class IterationTest {
 
         assertThat(sum).isEqualTo(50500);
     }
+
+    @Test
+    @DisplayName("반복문에 이름을 붙일 수 있다")
+    void iteration_naming() {
+        Loop1:
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (j == 5) {
+                    break Loop1;
+                }
+            }
+        }
+    }
 }
