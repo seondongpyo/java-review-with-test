@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ArrayTest {
 
@@ -22,7 +23,6 @@ class ArrayTest {
 
         // 배열의 초기화
         intArray1[0] = 1; // 첫 번째 배열 요소의 값을 1로 초기화 (인덱스는 0부터 시작)
-//        intArray1[3] = 10; // ArrayIndexOutOfBoundsException 예외 : 배열의 길이(최대 인덱스는 2)를 초과하는 인덱스(3)를 사용하려고 할 경우 발생
         strArray1[0] = "one";
         strArray1[1] = "two";
 
@@ -40,6 +40,10 @@ class ArrayTest {
 
         assertThat(intArray1).contains(1).doesNotContain(2); // 첫 번째 int 배열에 1은 존재하지만 2는 없다
         assertThat(strArray1).contains("one").doesNotContain("three"); // 첫 번째 String 배열에 "two"는 존재하지만 "three"는 없다
+
+        // 배열의 길이를 초과하는 인덱스를 사용하려고 할 경우, ArrayIndexOutOfBoundsException 발생
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> intArray1[3] = 10);
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> strArray1[7] = "six");
     }
 
     @Test
