@@ -27,6 +27,10 @@ class AssignmentOperatorTest {
         assertThat(value2 |= 11).isEqualTo(15);  // 0100 | 1011 = 1111
         assertThat(value2 ^= 2).isEqualTo(13); // 1111 ^ 0010 = 1101
         assertThat(value2 >>>= 2).isEqualTo(3); // 1101 >>> 2 = 0011
+
+        int a = 2;
+        int b = 3;
+        assertThat(a *= 10 + b).isEqualTo(26); // a = a * (10 + b);
     }
 
 }
