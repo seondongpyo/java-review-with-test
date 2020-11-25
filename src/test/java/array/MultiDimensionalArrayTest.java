@@ -44,4 +44,28 @@ class MultiDimensionalArrayTest {
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> array4[1][3] = 7);
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> array5[0][4] = 5);
     }
+
+    @Test
+    @DisplayName("가변 배열")
+    void dynamicArray() {
+        int[][] array1 = new int[2][]; // 열의 길이를 명시하지 않음
+
+        // 행마다 다른 길이의 배열을 요소로 저장할 수 있다
+        array1[0] = new int[3]; // array1의 첫 번째 배열 요소를 배열로 생성
+        array1[0][1] = 1;
+        array1[0][2] = 2;
+        array1[1] = new int[]{4, 5, 6, 7};
+
+        // 가변 배열의 선언, 생성 및 초기화
+        int[][] array2 = {{1, 2}, {3, 4, 5}, {6, 7, 8, 9}};
+
+        assertThat(array1.length).isEqualTo(2); // array1 배열은 배열 요소로 2개의 배열을 가지고 있는 배열이다
+        assertThat(array1[0].length).isEqualTo(3); // array1 배열의 첫 번째 배열 요소인 배열의 길이는 3
+        assertThat(array1[1].length).isEqualTo(4); // array1 배열의 두 번째 배열 요소인 배열의 길이는 4
+
+        assertThat(array2.length).isEqualTo(3); // array2 배열은 배열 요소로 3개의 배열을 가지고 있는 배열이다
+        assertThat(array2[0].length).isEqualTo(2); // array2 배열의 첫 번째 배열 요소인 배열의 길이는 2
+        assertThat(array2[1].length).isEqualTo(3); // array2 배열의 두 번째 배열 요소인 배열의 길이는 3
+        assertThat(array2[2].length).isEqualTo(4); // array2 배열의 세 번째 배열 요소인 배열의 길이는 4
+    }
 }
