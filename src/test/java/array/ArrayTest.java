@@ -3,7 +3,11 @@ package array;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Random;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ArrayTest {
@@ -82,5 +86,61 @@ class ArrayTest {
         assertThat(sum).isEqualTo(425); // 점수의 총합
         assertThat(sum / scores.length).isEqualTo(85); // 평균 점수
 
+    }
+
+    @Test
+    @DisplayName("배열의 활용 - 오름차순 정렬")
+    void array_sort_ascending_order() {
+        int[] beforeSortedArray = {1, 7, 4, 8, 5, 2, 9, 0, 3, 6};
+        int[] afterSortedArray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        Arrays.sort(beforeSortedArray); // 배열 요소를 오름차순으로 정렬
+
+        assertArrayEquals(beforeSortedArray, afterSortedArray);
+    }
+
+    @Test
+    @DisplayName("정렬할 배열의 크기가 크면 Arrays.sort()보다 Arrays.parallelSort()가 더 빠르다")
+    void array_sort_vs_parallelSort() {
+        /*
+            Arrays.sort()
+                - 프로세서 코어가 하나인 경우 또는 크기가 작은(8192 이하) 배열을 정렬 시 유리
+                - 싱글 스레드로 작동
+                - Dual-Pivot Quicksort 정렬 알고리즘 사용
+
+            Arrays.parallelSort()
+                - 크기가 큰 배열을 정렬 시 유리
+                - parallel sort-merge 정렬 알고리즘 사용
+
+         */
+        int sizeOfArray = 10000000;
+
+        // Arrays.sort()
+        long sortStart = System.currentTimeMillis();
+        Arrays.sort(createIntArray(sizeOfArray));
+        long sortEnd = System.currentTimeMillis();
+        double timeForSort = (sortEnd - sortStart) / 1000.0;
+
+        // Arrays.parallelSort()
+        long parallelSortStart = System.currentTimeMillis();
+        Arrays.parallelSort(createIntArray(sizeOfArray));
+        long parallelSortEnd = System.currentTimeMillis();
+        double timeForParallelSort = (parallelSortEnd - parallelSortStart) / 1000.0;
+
+        System.out.println("timeForSort = " + timeForSort);
+        System.out.println("timeForParallelSort = " + timeForParallelSort);
+
+        assertThat(timeForSort).isGreaterThan(timeForParallelSort);
+    }
+
+    private int[] createIntArray(int sizeOfArray) {
+        int[] array = new int[sizeOfArray];
+        Random random = new Random();
+
+        for (int i = 0; i < sizeOfArray; i++) {
+            array[i] = random.nextInt(sizeOfArray);
+        }
+
+        return array;
     }
 }
