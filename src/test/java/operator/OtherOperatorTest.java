@@ -14,9 +14,11 @@ class OtherOperatorTest {
         int b = 19;
         int c = (a > b) ? a : b; // (조건식) ? '참'일 경우의 값 : '거짓'일 경우의 값
         int d = (a > ++b) ? a : b;
+        double e = 0.3;
 
         assertThat(c).isEqualTo(a);
         assertThat(d).isEqualTo(b);
+        assertThat(e < 0.5 ? 0 : 0.5).isEqualTo(0.0).isInstanceOf(Double.class).isInstanceOf(Integer.class);
     }
 
     @Test
