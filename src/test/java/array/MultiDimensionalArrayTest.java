@@ -23,8 +23,8 @@ class MultiDimensionalArrayTest {
 
         // 초기화
         array1[0][0] = 1;
-        array2[0][1] = 2;
-        array3[0][2] = 3;
+        array2[1][1] = 2;
+        array3[2][2] = 3;
 
         // 선언과 생성을 동시에
 //        int[][] array = new int[1][2];
