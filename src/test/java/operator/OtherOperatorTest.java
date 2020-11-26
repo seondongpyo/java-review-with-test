@@ -18,7 +18,7 @@ class OtherOperatorTest {
 
         assertThat(c).isEqualTo(a);
         assertThat(d).isEqualTo(b);
-        assertThat(e < 0.5 ? 0 : 0.5).isEqualTo(0.0).isInstanceOf(Double.class).isInstanceOf(Integer.class);
+        assertThat(e < 0.5 ? 0 : 0.5).isEqualTo(0.0).isInstanceOf(Double.class).isNotInstanceOf(Integer.class);
     }
 
     @Test
