@@ -53,6 +53,16 @@ class MethodTest {
         assertThat(addDoubleValue).isEqualTo(30.0);
     }
 
+    @Test
+    @DisplayName("클래스 메서드와 인스턴스 메서드")
+    void classMethodAndInstanceMethod() {
+        //
+
+        // 특정 클래스의 인스턴스 메서드를 사용하려면 인스턴스를 먼저 생성해야 한다
+        Calculator calc = new Calculator();
+        calc.add();
+    }
+
     private int add(int a, int b) {
         return a + b;
     }
@@ -72,6 +82,19 @@ class MethodTest {
     private void setFloatValueToZero() {
         floatValue = 0.0f;
     }
+}
 
+class Calculator {
+    int a = 10; // 인스턴스 변수
+    int b = 20; // 인스턴스 변수
 
+    // 인스턴스 메서드
+    int add() {
+        return a + b;
+    }
+
+    // 클래스 메서드
+    static int add(int x, int y) {
+        return x + y;
+    }
 }
