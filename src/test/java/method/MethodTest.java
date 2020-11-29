@@ -56,11 +56,25 @@ class MethodTest {
     @Test
     @DisplayName("클래스 메서드와 인스턴스 메서드")
     void classMethodAndInstanceMethod() {
-        //
+        /*
+            << 클래스 메서드 >>
+            - 객체의 생성 없이 '클래스이름.메서드이름()'으로 호출 가능
+            - 인스턴스 변수나 인스턴스 메서드와 관련 없는 작업을 하는 메서드
+            - 메서드 내에서 인스턴스 변수는 사용할 수 없음
+            - 메서드 내에서 인스턴스 변수를 사용하지 않는다면 static 키워드를 붙이는 것을 고려한다
+         */
+        int addByClassMethod = Calculator.add(20, 30);
+        assertThat(addByClassMethod).isEqualTo(50);
 
-        // 특정 클래스의 인스턴스 메서드를 사용하려면 인스턴스를 먼저 생성해야 한다
+        /*
+            << 인스턴스 메서드 >>
+            - 인스턴스를 먼저 생성 후, '참조변수.메서드이름()'으로 호출 가능
+            - 인스턴스 변수나 인스턴스 메서드와 관련된 작업을 하는 메서드
+            - 메서드 내에서 인스턴스 변수 사용 가능
+         */
         Calculator calc = new Calculator();
-        calc.add();
+        int addByInstanceMethod = calc.add();
+        assertThat(addByInstanceMethod).isEqualTo(30);
     }
 
     private int add(int a, int b) {
