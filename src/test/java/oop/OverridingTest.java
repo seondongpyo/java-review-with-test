@@ -37,6 +37,23 @@ class OverridingTest {
         assertThat(point3d.getLocation()).isEqualTo("x : " + point3d.x + ", y : " + point3d.y + ", z : " + point3d.z);
     }
 
+    @Test
+    @DisplayName("오버라이딩 vs. 오버로딩")
+    void differenceBetweenOverridingAndOverloading() {
+        /*
+            << 오버라이딩 vs. 오버로딩 >>
+            * 오버라이딩 (overriding) : 조상으로부터 상속 받은 메서드의 내용을 변경하는 것 (change, modify)
+            * 오버로딩 (overloading) : 한 클래스 내에 같은 이름의 메서드를 여러 개 정의하는 것 (new)
+         */
+
+        Point point = new Point();
+        Point3d point3d = new Point3d();
+
+        assertThat(point.getLocation()).isEqualTo("x : " + point.x + ", y : " + point.y);
+        assertThat(point3d.getLocation()).isEqualTo("x : " + point3d.x + ", y : " + point3d.y + ", z : " + point3d.z);  // 오버라이딩
+        assertThat(point3d.getLocation(1, 2, 3)).isEqualTo("x : 1, y : 2, z : 3"); // 오버로딩
+    }
+
     class Point {
 
         int x;
@@ -67,5 +84,14 @@ class OverridingTest {
         String getLocation() { // 조상 메서드의 선언부와 일치해야 한다
             return "x : " + x + ", y : " + y + ", z : " + z;
         }
+
+        // 오버로딩 메서드
+        String getLocation(int x, int y, int z) { // 메서드의 이름이 같고 매개변수의 갯수, 타입이 다르다
+            return "x : " + x + ", y : " + y + ", z : " + z;
+        }
+
+//        String getLocation() { // 메서드 중복 선언
+//            return "(x, y, z) : (" + x + ", " + y + ", " + z + ")";
+//        }
     }
 }
