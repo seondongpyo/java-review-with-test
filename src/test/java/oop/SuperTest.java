@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class superTest {
+class SuperTest {
 
     @Test
-    @DisplayName("super 키워드")
+    @DisplayName("super - 참조변수")
     void superKeyword() {
         /*
             << super - 참조변수 >>
@@ -32,6 +32,16 @@ class superTest {
         assertThat(child2.getX_super()).isEqualTo(10); // Parent의 x
         assertThat(child2.getSumOfIntValues()).isEqualTo(30); // Child2의 메서드
         assertThat(child2.getSumOfIntValues_super()).isEqualTo(10); // Parent1의 메서드
+    }
+
+    @Test
+    @DisplayName("super() - 조상의 생성자")
+    void superConstructor() {
+        Point3d point3d = new Point3d(1, 2, 3);
+
+        assertThat(point3d.x).isEqualTo(1);
+        assertThat(point3d.y).isEqualTo(2);
+        assertThat(point3d.z).isEqualTo(3);
     }
 
     class Parent {
@@ -85,6 +95,27 @@ class superTest {
 
         int getSumOfIntValues_super() {
             return super.getSumOfIntValues(); // 조상의 메서드 호출
+        }
+    }
+
+    class Point {
+
+        int x;
+        int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    class Point3d extends Point {
+
+        int z;
+
+        public Point3d(int x, int y, int z) {
+            super(x, y); // 조상의 생성자를 호출하여 멤버를 초기화
+            this.z = z;
         }
     }
 }
