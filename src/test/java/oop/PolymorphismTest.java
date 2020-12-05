@@ -36,6 +36,24 @@ class PolymorphismTest {
 //        CaptionTv captionTv = new Tv(); // 에러
         // => 자손 클래스 타입의 참조변수로 조상 클래스 타입의 인스턴스는 참조할 수 없다
     }
+
+    @Test
+    @DisplayName("참조변수의 형변환")
+    void polymorphismCast() {
+        /*
+            << 참조변수의 형변환 >>
+            * 서로 상속 관계에 있는 클래스 사이에서는 자손 클래스 타입의 참조변수를 조상 클래스 타입의 참조변수로,
+              조상 클래스 타입의 참조변수를 자손 클래스 타입의 참조변수로 형변환이 가능하다
+            * 서로 상속 관계에 있는 클래스 타입 간의 형변환은 양방향으로 자유롭게 수행될 수 있으나,
+              참조변수가 가리키는 인스턴스의 자손 클래스 타입으로의 형변환은 허용되지 않는다
+              따라서 참조변수가 가리키는 인스턴스의 타입이 무엇인지 먼저 확인하는 것이 중요하다
+         */
+
+        CaptionTv captionTv1 = new CaptionTv();
+        Tv tv = (Tv) captionTv1; // 조상인 Tv 클래스 타입으로 형변환(생략 가능)
+        CaptionTv captionTv2 = (CaptionTv) tv; // 자손인 CaptionTv 클래스 타입으로 형변환(생략 불가능)
+//        SmartTv smartTv = (CaptionTv) captionTv2; // 에러 : 상속 관계가 아닌 클래스 간의 형변환은 불가능
+    }
 }
 
 class Tv {
@@ -84,4 +102,8 @@ class CaptionTv extends Tv {
     void captionOff() {
         caption = false;
     }
+}
+
+class SmartTv extends Tv {
+
 }
