@@ -54,6 +54,25 @@ class PolymorphismTest {
         CaptionTv captionTv2 = (CaptionTv) tv; // 자손인 CaptionTv 클래스 타입으로 형변환(생략 불가능)
 //        SmartTv smartTv = (CaptionTv) captionTv2; // 에러 : 상속 관계가 아닌 클래스 간의 형변환은 불가능
     }
+
+    @Test
+    @DisplayName("instanceof 연산자")
+    void instanceOf() {
+        Tv tv = new Tv();
+        CaptionTv captionTv = new CaptionTv();
+        SmartTv smartTv = new SmartTv();
+
+        assertThat(captionTv instanceof CaptionTv).isTrue();
+        assertThat(smartTv instanceof SmartTv).isTrue();
+
+        // instanceof 결과가 true : 참조변수를 검사한 타입으로 형변환 할 수 있다
+        assertThat(captionTv instanceof Tv).isTrue();
+        assertThat(smartTv instanceof Tv).isTrue();
+
+        assertThat(tv instanceof Tv).isTrue();
+        assertThat(tv instanceof CaptionTv).isFalse();
+        assertThat(tv instanceof SmartTv).isFalse();
+    }
 }
 
 class Tv {
