@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.image.BufferedImage;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 class PolymorphismTest {
 
@@ -94,6 +95,24 @@ class PolymorphismTest {
         assertThat(buyer.money).isEqualTo(40000);
         assertThat(buyer.bonusPoint).isEqualTo(600);
     }
+
+    @Test
+    @DisplayName("여러 종류의 객체를 배열로 다루기")
+    void objectArray() {
+        Product computer = new Computer(50000, 500);
+        Product monitor = new Monitor(20000, 200);
+        Product audio = new Audio(10000, 100);
+        Buyer buyer = new Buyer();
+        buyer.buy(computer); // 컴퓨터 구매
+        buyer.buy(monitor); // 모니터 구매
+        buyer.buy(audio); // 오디오 구매
+
+        assertThat(buyer.money).isEqualTo(20000);
+        assertThat(buyer.bonusPoint).isEqualTo(800);
+        assertThat(buyer.cart).contains(computer);
+        assertThat(buyer.cart).contains(monitor);
+        assertThat(buyer.cart).contains(audio);
+    }
 }
 
 class Tv {
@@ -171,10 +190,18 @@ class Monitor extends Product {
     }
 }
 
+class Audio extends Product {
+    public Audio(int price, int bonusPoint) {
+        super(price, bonusPoint);
+    }
+}
+
 class Buyer {
 
     int money = 100000;
     int bonusPoint = 0;
+    Product[] cart = new Product[10]; // Product 배열(상품을 담기 위한 장바구니)
+    int index = 0; // Product 배열의 index
 
     // 다형성을 활용하지 않는 경우, 상품 품목이 늘어날 때마다 새로운 메서드를 계속 추가해야 한다
 //        void buy(Computer computer) {
@@ -190,5 +217,6 @@ class Buyer {
     void buy(Product product) { // 매개변수로 다형성을 활용
         money -= product.price;
         bonusPoint += product.bonusPoint;
+        cart[index++] = product; // 장바구니에 상품을 추가
     }
 }
