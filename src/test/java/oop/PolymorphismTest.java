@@ -3,6 +3,8 @@ package oop;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.awt.image.BufferedImage;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PolymorphismTest {
@@ -73,6 +75,25 @@ class PolymorphismTest {
         assertThat(tv instanceof CaptionTv).isFalse();
         assertThat(tv instanceof SmartTv).isFalse();
     }
+
+    @Test
+    @DisplayName("매개변수의 다형성")
+    void polymorphismParameter() {
+        Buyer buyer = new Buyer();
+        assertThat(buyer.money).isEqualTo(100000);
+        assertThat(buyer.bonusPoint).isEqualTo(0);
+
+        Product computer = new Computer(40000, 400); // 컴퓨터 입고
+        Product monitor = new Monitor(20000, 200); // 모니터 입고
+
+        buyer.buy(computer); // 고객이 컴퓨터를 구입
+        assertThat(buyer.money).isEqualTo(60000);
+        assertThat(buyer.bonusPoint).isEqualTo(400);
+
+        buyer.buy(monitor); // 고객이 모니터를 구입
+        assertThat(buyer.money).isEqualTo(40000);
+        assertThat(buyer.bonusPoint).isEqualTo(600);
+    }
 }
 
 class Tv {
@@ -125,4 +146,49 @@ class CaptionTv extends Tv {
 
 class SmartTv extends Tv {
 
+}
+
+class Product {
+
+    int price;
+    int bonusPoint;
+
+    public Product(int price, int bonusPoint) {
+        this.price = price;
+        this.bonusPoint = bonusPoint;
+    }
+}
+
+class Computer extends Product {
+    public Computer(int price, int bonusPoint) {
+        super(price, bonusPoint);
+    }
+}
+
+class Monitor extends Product {
+    public Monitor(int price, int bonusPoint) {
+        super(price, bonusPoint);
+    }
+}
+
+class Buyer {
+
+    int money = 100000;
+    int bonusPoint = 0;
+
+    // 다형성을 활용하지 않는 경우, 상품 품목이 늘어날 때마다 새로운 메서드를 계속 추가해야 한다
+//        void buy(Computer computer) {
+//            money -= computer.price;
+//            bonusPoint += computer.bonusPoint;
+//        }
+//
+//        void buy(Monitor monitor) {
+//            money -= monitor.price;
+//            bonusPoint += monitor.bonusPoint;
+//        }
+
+    void buy(Product product) { // 매개변수로 다형성을 활용
+        money -= product.price;
+        bonusPoint += product.bonusPoint;
+    }
 }
