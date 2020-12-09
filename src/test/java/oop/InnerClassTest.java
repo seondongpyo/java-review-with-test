@@ -1,6 +1,5 @@
 package oop;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -44,8 +43,8 @@ class InnerClassTest {
         Outer outer = new Outer();
 
         assertThat(Outer.Inner.innerConstantVariable).isEqualTo(20);
-        assertThat(Outer.InstanceInner.instanceInnerVariable).isEqualTo(30);
-        assertThat(outer.getInnerVariable()).isEqualTo(10);
+        assertThat(Outer.InstanceInner.instanceInnerConstantVariable).isEqualTo(30);
+        assertThat(outer.new Inner().innerVariable).isEqualTo(10);
         assertThat(outer.getLocalInnerVariable()).isEqualTo(40);
     }
 }
@@ -58,11 +57,7 @@ class Outer {
     }
 
     static class InstanceInner { // 정적(static) 클래스
-        static int instanceInnerVariable = 30;
-    }
-
-    int getInnerVariable() {
-        return new Inner().innerVariable;
+        static int instanceInnerConstantVariable = 30;
     }
 
     int getLocalInnerVariable() { // 지역 클래스
