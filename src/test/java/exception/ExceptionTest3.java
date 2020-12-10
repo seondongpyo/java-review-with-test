@@ -30,8 +30,29 @@ class ExceptionTest3 {
         assertThatThrownBy(this::method).isInstanceOf(ArrayIndexOutOfBoundsException.class);
     }
 
+    @Test
+    @DisplayName("finally 블록 : 예외 발생 여부와 관계 없이 항상 수행된다")
+    void finallyBlock() {
+        assertThat(finallyTest(10, 2)).isEqualTo(6);
+        assertThat(finallyTest(1, 0)).isEqualTo(2);
+    }
+
     void method() throws ArrayIndexOutOfBoundsException { // 예외 회피하기(던지기)
         int[] array = new int[1];
         array[1] = 10;
+    }
+
+    int finallyTest(int a, int b) {
+        int result = 0;
+
+        try {
+            result = a / b; // a / b의 결과값을 변수에 저장
+        } catch (ArithmeticException e) {
+            result = a; // 예외 발생 시 첫 번째 매개변수 값을 변수에 저장
+        } finally {
+            result += 1; // 예외 발생 여부와 상관 없이 변수 값에 1을 더하기
+        }
+
+        return result;
     }
 }
