@@ -41,6 +41,7 @@ class ExceptionTest3 {
     @DisplayName("사용자 정의 예외 만들기")
     void customException() {
         assertThrows(MyException.class, this::throwCustomException);
+        assertThat(getExceptionErrorCode()).isEqualTo(100);
     }
 
     void method() throws ArrayIndexOutOfBoundsException { // 예외 회피하기(던지기)
@@ -64,6 +65,16 @@ class ExceptionTest3 {
 
     void throwCustomException() throws MyException {
         throw new MyException("사용자 정의 예외 발생");
+    }
+
+    int getExceptionErrorCode() {
+        try {
+            throwCustomException();
+        } catch (MyException e) {
+            return e.ERROR_CODE;
+        }
+
+        return 0;
     }
 
     // 사용자 정의 예외 클래스
