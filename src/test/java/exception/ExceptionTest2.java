@@ -55,9 +55,26 @@ class ExceptionTest2 {
         // -> Exception 클래스와 자손들(= checked 예외)이 발생할 가능성이 있는 문장들은
         //    예외 처리를 하지 않을 경우 컴파일조차 되지 않는다
 
+        //    << 내용 추가 >>
+        //    Exception 클래스에 속하는 자식 클래스들은 치명적인 예외 상황을 발생시키므로,
+        //    반드시 try / catch 문을 사용하여 예외를 처리해야만 한다
+        //    따라서 자바 컴파일러는 RuntimeException 클래스 이외의 Exception 클래스의 자식 클래스에 속하는 예외가
+        //    발생할 가능성이 있는 구문에는 반드시 예외를 처리하도록 강제하고 있다
+        //    만약 이러한 예외가 발생할 가능성이 있는 구문을 예외 처리하지 않았을 때는 컴파일 시 오류를 발생시킨다
+
 //        throw new RuntimeException(); // 컴파일 에러가 발생하지 않음
         // -> RuntimeException 클래스와 자손들(= unchecked 예외)에 해당하는 예외는
         //    프로그래머가 실수로 발생하는 것들이므로 예외 처리를 강제하지 않는다
+
+        //    << 내용 추가 >>
+        //    RuntimeException 클래스를 상속받는 자식 클래스들은 주로 치명적인 예외 상황을 발생시키지 않는 예외들로 구성된다
+        //    따라서 try / catch 문을 사용하기보다는 프로그램을 작성하면서 예외가 발생하지 않도록 주의를 기울이는 편이 좋다
+
+        /*
+
+
+
+         */
 
         assertThrows(Exception.class, () -> { throw new Exception(); });
         assertThrows(RuntimeException.class, () -> { throw new RuntimeException(); });
