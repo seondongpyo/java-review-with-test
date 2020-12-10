@@ -37,6 +37,12 @@ class ExceptionTest3 {
         assertThat(finallyTest(1, 0)).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("사용자 정의 예외 만들기")
+    void customException() {
+        assertThrows(MyException.class, this::throwCustomException);
+    }
+
     void method() throws ArrayIndexOutOfBoundsException { // 예외 회피하기(던지기)
         int[] array = new int[1];
         array[1] = 10;
@@ -54,5 +60,23 @@ class ExceptionTest3 {
         }
 
         return result;
+    }
+
+    void throwCustomException() throws MyException {
+        throw new MyException("사용자 정의 예외 발생");
+    }
+
+    // 사용자 정의 예외 클래스
+    class MyException extends Exception {
+        private final int ERROR_CODE; // 에러 코드 값
+
+        public MyException(String message) {
+            super(message); // 조상 클래스인 Exception 클래스의 생성자 호출
+            ERROR_CODE = 100;
+        }
+
+        public int getErrorCode() {
+            return ERROR_CODE;
+        }
     }
 }
