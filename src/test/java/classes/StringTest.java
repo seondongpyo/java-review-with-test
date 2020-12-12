@@ -61,4 +61,24 @@ class StringTest {
         assertThat(str2.length()).isZero();
         assertThat(str3.length()).isZero();
     }
+
+    @Test
+    @DisplayName("(last)indexOf : 문자열 내에서 주어진 문자의 위치를 반환 (못 찾으면 -1 반환)")
+    void indexOf() {
+        // index :      0123456789
+        // lastIndex :  9876543210
+        String str =   "Hello Java";
+
+        // indexOf : 문자열의 앞부터 시작 (왼쪽 -> 오른쪽)
+        assertThat(str.indexOf("l")).isEqualTo(2); // 문자열의 처음부터 시작하여 첫 번째로 만나는 문자의 위치를 알려준다
+        assertThat(str.indexOf("Hi")).isEqualTo(-1); // "Hi"라는 문자열은 포함되어 있지 않다
+        assertThat(str.indexOf('a', 8)).isEqualTo(9); // 인덱스 8부터 시작하여 'a'라는 문자의 위치를 찾는다
+        assertThat(str.indexOf("He", 2)).isEqualTo(-1); // 인덱스 2 이후에 "He"라는 문자열은 없다
+
+        // lastIndexOf : 문자열의 뒤부터 시작 (오른쪽 -> 왼쪽)
+        assertThat(str.lastIndexOf('l')).isEqualTo(3); // 문자열의 끝부터 시작하여 첫 번째로 만나는 문자의 위치를 알려준다
+        assertThat(str.lastIndexOf("JavaScript")).isEqualTo(-1);
+        assertThat(str.lastIndexOf('a', 8)).isEqualTo(7);
+        assertThat(str.lastIndexOf("Java", 4)).isEqualTo(-1);
+    }
 }
