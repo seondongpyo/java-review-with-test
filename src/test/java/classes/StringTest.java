@@ -1,9 +1,12 @@
 package classes;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StringTest {
 
@@ -80,5 +83,18 @@ class StringTest {
         assertThat(str.lastIndexOf("JavaScript")).isEqualTo(-1);
         assertThat(str.lastIndexOf('a', 8)).isEqualTo(7);
         assertThat(str.lastIndexOf("Java", 4)).isEqualTo(-1);
+    }
+
+    @Test
+    @DisplayName("charAt : 문자열 내에서 지정된 위치에 있는 문자를 반환")
+    void charAt() {
+        // index :    0123456789
+        String str = "Hello Java";
+
+        assertThat(str.charAt(3) == 'l').isTrue();
+        assertThat(str.charAt(5) == ' ').isTrue();
+        assertThrows(StringIndexOutOfBoundsException.class, () -> {
+            str.charAt(10); // 범위에 없는 인덱스의 문자의 반환을 요청 시 예외 발생
+        });
     }
 }
