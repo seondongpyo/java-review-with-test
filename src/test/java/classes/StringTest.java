@@ -45,4 +45,20 @@ class StringTest {
         assertThat(str2 == str3).isTrue();
         assertThat(str1 == str3).isTrue();
     }
+
+    @Test
+    @DisplayName("빈 문자열 (empty string)")
+    void emptyString() {
+        char[] charArray1 = new char[0];
+        char[] charArray2 = {};
+        String str1 = ""; // 빈 문자열로 초기화, 길이가 0인 char형 배열을 저장하고 있다
+        String str2 = new String(charArray1);
+        String str3 = new String("");
+
+        assertThat(charArray1.length).isZero();
+        assertThat(charArray2.length).isZero();
+        assertThat(str1.length()).isZero();
+        assertThat(str2.length()).isZero();
+        assertThat(str3.length()).isZero();
+    }
 }
