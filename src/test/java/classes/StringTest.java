@@ -143,4 +143,14 @@ class StringTest {
         assertThat(str.replaceAll("CC", "cc")).isEqualTo("AABBccBBccAA");
         assertThat(str.replaceFirst("BB", "bb")).isEqualTo("AAbbCCBBCCAA");
     }
+
+    @Test
+    @DisplayName("substring : 문자열 자르기")
+    void substring() {
+        // index :    0123456789
+        String str = "Hello Java";
+
+        assertThat(str.substring(3)).isEqualTo("lo Java"); // 시작 인덱스부터 문자열 끝까지
+        assertThat(str.substring(1, 4)).isEqualTo("ell"); // 마지막 인덱스는 포함되지 않는다
+    }
 }
