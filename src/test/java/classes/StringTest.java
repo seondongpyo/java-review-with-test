@@ -141,5 +141,6 @@ class StringTest {
         assertThat(str.replace('A', 'a')).isEqualTo("aaBBCCBBCCaa");
         assertThat(str.replace("B", "b")).isEqualTo("AAbbCCbbCCAA");
         assertThat(str.replaceAll("CC", "cc")).isEqualTo("AABBccBBccAA");
+        assertThat(str.replaceFirst("BB", "bb")).isEqualTo("AAbbCCBBCCAA");
     }
 }
