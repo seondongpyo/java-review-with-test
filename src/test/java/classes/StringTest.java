@@ -132,4 +132,14 @@ class StringTest {
         assertThat(str).startsWith("He");
         assertThat(str).endsWith("va");
     }
+
+    @Test
+    @DisplayName("replace(All) : 문자열 치환하기")
+    void replace() {
+        String str = "AABBCCBBCCAA";
+
+        assertThat(str.replace('A', 'a')).isEqualTo("aaBBCCBBCCaa");
+        assertThat(str.replace("B", "b")).isEqualTo("AAbbCCbbCCAA");
+        assertThat(str.replaceAll("CC", "cc")).isEqualTo("AABBccBBccAA");
+    }
 }
