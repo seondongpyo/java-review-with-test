@@ -106,4 +106,16 @@ class StringTest {
 
         assertThat(str1.concat(str2)).isEqualTo("HelloJava");
     }
+
+    @Test
+    @DisplayName("equalsIgnoreCase : 대소문자 구별 없이 문자열 비교하기")
+    void equalsIgnoreCase() {
+        String str1 = "hello java";
+        String str2 = "HELLO JAVA";
+        String str3 = "HeLlO jAvA";
+
+        assertThat(str1).isEqualToIgnoringCase(str2);
+        assertThat(str2).isEqualToIgnoringCase(str3);
+        assertThat(str3).isEqualToIgnoringCase(str1);
+    }
 }
