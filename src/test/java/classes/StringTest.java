@@ -153,4 +153,13 @@ class StringTest {
         assertThat(str.substring(3)).isEqualTo("lo Java"); // 시작 인덱스부터 문자열 끝까지
         assertThat(str.substring(1, 4)).isEqualTo("ell"); // 마지막 인덱스는 포함되지 않는다
     }
+
+    @Test
+    @DisplayName("toUpper(Lower)Case : 문자열의 대소문자 변환하기")
+    void toUpperLowerCase() {
+        String str = "HeLlO jAvA";
+
+        assertThat(str.toUpperCase()).isEqualTo("HELLO JAVA"); // 모든 문자열을 대문자로
+        assertThat(str.toLowerCase()).isEqualTo("hello java"); // 모든 문자열을 소문자로
+    }
 }
