@@ -162,4 +162,32 @@ class StringTest {
         assertThat(str.toUpperCase()).isEqualTo("HELLO JAVA"); // 모든 문자열을 대문자로
         assertThat(str.toLowerCase()).isEqualTo("hello java"); // 모든 문자열을 소문자로
     }
+
+    @Test
+    @DisplayName("trim : 문자열의 왼쪽 끝과 오른쪽 끝에 있는 공백 제거 (문자열 중간의 공백은 제거 x)")
+    void trim() {
+        String str = "     Hello Java     ";
+
+        assertThat(str.trim()).isEqualTo("Hello Java");
+    }
+
+    @Test
+    @DisplayName("valueOf : 지정된 값을 문자열로 변환")
+    void valueOf() {
+        byte b = 10;
+        short s = 128;
+        int i = 10000;
+        long l = 1000000000L;
+        float f = 3.14f;
+        double d = 3.14;
+        char c = 'A';
+
+        assertThat(String.valueOf(b)).isEqualTo("10");
+        assertThat(String.valueOf(s)).isEqualTo("128");
+        assertThat(String.valueOf(i)).isEqualTo("10000");
+        assertThat(String.valueOf(l)).isEqualTo("1000000000");
+        assertThat(String.valueOf(f)).isEqualTo("3.14");
+        assertThat(String.valueOf(d)).isEqualTo("3.14");
+        assertThat(String.valueOf(c)).isEqualTo("A");
+    }
 }
