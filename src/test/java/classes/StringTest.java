@@ -118,4 +118,15 @@ class StringTest {
         assertThat(str2).isEqualToIgnoringCase(str3);
         assertThat(str3).isEqualToIgnoringCase(str1);
     }
+
+    @Test
+    @DisplayName("startsWith & endsWith : 특정 문자열로 시작하거나 또는 끝나는지 확인")
+    void startsEndsWith() {
+        String str = "Hello Java";
+
+        assertThat(str.startsWith("He")).isTrue();
+        assertThat(str.endsWith("va")).isTrue();
+        assertThat(str).startsWith("He");
+        assertThat(str).endsWith("va");
+    }
 }
