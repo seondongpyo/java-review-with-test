@@ -97,4 +97,13 @@ class StringTest {
             str.charAt(10); // 범위에 없는 인덱스의 문자의 반환을 요청 시 예외 발생
         });
     }
+
+    @Test
+    @DisplayName("concat : 문자열 이어 붙이기")
+    void concat() {
+        String str1 = "Hello";
+        String str2 = "Java";
+
+        assertThat(str1.concat(str2)).isEqualTo("HelloJava");
+    }
 }
