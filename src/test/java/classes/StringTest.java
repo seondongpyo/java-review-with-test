@@ -114,6 +114,9 @@ class StringTest {
         String str2 = "HELLO JAVA";
         String str3 = "HeLlO jAvA";
 
+        assertThat(str1.equalsIgnoreCase(str2)).isTrue();
+        assertThat(str2.equalsIgnoreCase(str3)).isTrue();
+        assertThat(str3.equalsIgnoreCase(str1)).isTrue();
         assertThat(str1).isEqualToIgnoringCase(str2);
         assertThat(str2).isEqualToIgnoringCase(str3);
         assertThat(str3).isEqualToIgnoringCase(str1);
