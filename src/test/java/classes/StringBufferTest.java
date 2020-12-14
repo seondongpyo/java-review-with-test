@@ -43,4 +43,28 @@ class StringBufferTest {
         assertThat(sb2.toString()).isEqualTo("strstrstr");
         assertThat(sb3.toString()).isEqualTo("strstrstr");
     }
+
+    @Test
+    @DisplayName("StringBuffer의 비교")
+    void stringBufferComparison() {
+        /*
+            << StringBuffer의 비교 >>
+            - String 클래스에서는 equals 메서드를 오버라이딩해서 문자열의 내용을 비교하도록 구현되어 있지만,
+              StringBuffer 클래스는 equals 메서드를 오버라이딩하지 않기 때문에
+              equals 메서드를 사용해도 등가비교연산자(==)로 비교한 것과 같은 결과가 나온다
+            - 반면에 toString 메서드는 오버라이딩되어 있어서, toString 메서드를 호출하면
+              StringBuffer 인스턴스가 담고 있는 문자열을 String으로 반환한다
+              따라서 StringBuffer 인스턴스에 담긴 문자열을 비교하기 위해서는 toString 메서드를 호출하여
+              String 인스턴스를 얻은 다음, 여기에 equals 메서드를 호출하여 비교해야 한다
+         */
+        StringBuffer sb1 = new StringBuffer("str");
+        StringBuffer sb2 = new StringBuffer("str");
+        assertThat(sb1 == sb2).isFalse(); // == 비교 (false)
+        assertThat(sb1.equals(sb2)).isFalse(); // StringBuffer의 equals 비교 : == 비교와 동일 (false)
+
+        String str1 = sb1.toString();
+        String str2 = sb2.toString();
+        assertThat(str1 == str2).isFalse(); // == 비교 (false)
+        assertThat(str1.equals(str2)).isTrue(); // String의 equals 비교 (true)
+    }
 }
