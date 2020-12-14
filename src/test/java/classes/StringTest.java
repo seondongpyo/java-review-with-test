@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.StringJoiner;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -189,5 +191,65 @@ class StringTest {
         assertThat(String.valueOf(f)).isEqualTo("3.14");
         assertThat(String.valueOf(d)).isEqualTo("3.14");
         assertThat(String.valueOf(c)).isEqualTo("A");
+    }
+
+    @Test
+    @DisplayName("join : 문자열 사이에 구분자를 넣어서 결합")
+    void join() {
+        String animals = "dog,cat,bear";
+        String[] array = animals.split(","); // 문자열을 ','를 구분자로 나눠서 배열에 저장
+        String str = String.join("-", array); // 배열의 문자열을 '-'로 구분해서 결합
+
+        assertThat(str).isEqualTo("dog-cat-bear");
+    }
+
+    @Test
+    @DisplayName("StringJoiner : 문자열 결합 (JDK 1.8~)")
+    void stringJoiner() {
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        String[] array = {"dog", "cat", "bear"};
+
+        for (String animal : array) {
+            joiner.add(animal); // '['과 ']' 사이에 문자열을 ','를 구분자로 하여 결합
+        }
+
+        assertThat(joiner.toString()).isEqualTo("[dog,cat,bear]");
+    }
+
+    @Test
+    @DisplayName("StringBuffer 클래스")
+    void stringBuffer() {
+        /*
+            << StringBuffer 클래스 >>
+            - 인스턴스를 생성할 때 지정된 문자열을 변경할 수 있다
+            - 내부적으로 문자열 편집을 위한 버퍼를 가지고 있다
+            - 인스턴스를 생성할 때, 적절한 길이의 char형 배열이 생성되고
+              이 배열은 문자열을 저장하고 편집하기 위한 공간(buffer)으로 사용된다
+            - 인스턴스 생성 시, 인스턴스에 저장될 문자열의 길이를 고려하여 충분히 여유있는 크기로 지정하는 것이 좋다
+              버퍼의 크기를 지정해주지 않으면 16개의 문자를 저장할 수 있는 크기의 버퍼를 생성한다
+         */
+
+        StringBuffer sb1 = new StringBuffer(); // 버퍼의 크기를 지정하지 않으면 버퍼의 크기는 16이 된다
+        /*
+            public StringBuffer() {
+                super(16);
+            }
+         */
+
+        StringBuffer sb2 = new StringBuffer("str"); // 지정한 문자열의 길이보다 16이 더 크게 버퍼를 생성한다
+        /*
+            public StringBuffer(String str) {
+                super(str.length() + 16);
+                this.append(str);
+            }
+         */
+
+        StringBuffer str = sb1.append("str"); // append() : 자신의 주소를 반환한다
+        StringBuffer sb3 = sb2.append("str"); // sb2의 주소를 sb3에 저장
+        sb3.append("str");
+
+        assertThat(str.toString()).isEqualTo("str");
+        assertThat(sb2.toString()).isEqualTo("strstrstr");
+        assertThat(sb3.toString()).isEqualTo("strstrstr");
     }
 }
