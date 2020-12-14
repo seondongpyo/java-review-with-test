@@ -67,4 +67,22 @@ class StringBufferTest {
         assertThat(str1 == str2).isFalse(); // == 비교 (false)
         assertThat(str1.equals(str2)).isTrue(); // String의 equals 비교 (true)
     }
+
+    @Test
+    @DisplayName("StringBuffer 클래스의 메서드")
+    void stringBufferMethods() {
+        StringBuffer sb = new StringBuffer("stringBuffer");
+
+        assertThat(sb.capacity()).isEqualTo(28); // 버퍼의 크기를 반환 (문자열 길이(12)보다 +16)
+        assertThat(sb.charAt(1)).isEqualTo('t'); // 인덱스(1)에 해당하는 문자 반환
+        assertThat(sb.delete(3, 5).toString()).isEqualTo("strgBuffer"); // 시작 위치(3)부터 끝 위치(5) 사이에 있는 문자를 제거 (단, 끝 위치는 포함 안 됨)
+        assertThat(sb.deleteCharAt(5).toString()).isEqualTo("strgBffer"); // 인덱스(5)에 해당하는 문자 제거
+        assertThat(sb.insert(3, "in").toString()).isEqualTo("stringBffer"); // 지정된 위치(3)에 두 번째 매개변수로 받은 값을 문자열로 변환하여 추가
+        assertThat(sb.insert(7, 'u').toString()).isEqualTo("stringBuffer");
+        assertThat(sb.insert(12, 123).toString()).isEqualTo("stringBuffer123");
+        assertThat(sb.reverse().toString()).isEqualTo("321reffuBgnirts"); // 문자열 순서를 거꾸로 나열하기
+        assertThat(sb.replace(0, 3, "456").toString()).isEqualTo("456reffuBgnirts"); // 지정된 범위의 문자들을 주어진 문자들로 변환
+        assertThat(sb.substring(3, 8).toString()).isEqualTo("reffu"); // 지정된 범위 내의 문자열을 String으로 반환
+        assertThat(sb.substring(8).toString()).isEqualTo("Bgnirts");
+    }
 }
