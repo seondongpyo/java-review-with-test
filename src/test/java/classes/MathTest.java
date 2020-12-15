@@ -46,4 +46,21 @@ class MathTest {
         assertThat(Math.pow(3, 4)).isEqualTo(81); // n제곱
         assertThat(Math.sqrt(16)).isEqualTo(4); // 제곱근
     }
+
+    @Test
+    @DisplayName("Math 클래스 - 난수 (random)")
+    void mathRandom() {
+        // Math.random() : 0.0 ~ 1.0 사이에 속하는 임의의 double 값을 반환 (1.0은 포함되지 않음)
+        // 0.0 <= Math.random() < 1.0
+        double randomDouble = Math.random();
+
+        // Q. 1부터 99까지의 정수 중 하나의 난수를 구하려면?
+        // 1) 양변에 99을 곱한다 -> 0.0 <= Math.random() * 99 < 99.0
+        // 2) 양변을 int로 형변환한다 -> 0 <= (int)(Math.random() * 99) < 99
+        // 3) 양변에 1을 더한다 -> 1 <= (int)(Math.random() * 99) + 1 < 100
+        int randomInt = (int) (Math.random() * 99) + 1;
+
+        assertThat(randomDouble).isGreaterThanOrEqualTo(0.0).isLessThan(1.0);
+        assertThat(randomInt).isGreaterThanOrEqualTo(1).isLessThan(100);
+    }
 }
