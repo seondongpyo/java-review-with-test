@@ -82,7 +82,7 @@ class StringBufferTest {
         assertThat(sb.insert(12, 123).toString()).isEqualTo("stringBuffer123");
         assertThat(sb.reverse().toString()).isEqualTo("321reffuBgnirts"); // 문자열 순서를 거꾸로 나열하기
         assertThat(sb.replace(0, 3, "456").toString()).isEqualTo("456reffuBgnirts"); // 지정된 범위의 문자들을 주어진 문자들로 변환
-        assertThat(sb.substring(3, 8).toString()).isEqualTo("reffu"); // 지정된 범위 내의 문자열을 String으로 반환
-        assertThat(sb.substring(8).toString()).isEqualTo("Bgnirts");
+        assertThat(sb.substring(3, 8)).isEqualTo("reffu"); // 지정된 범위 내의 문자열을 String으로 반환
+        assertThat(sb.substring(8)).isEqualTo("Bgnirts");
     }
 }
