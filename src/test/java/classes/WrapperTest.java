@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,7 +55,7 @@ class WrapperTest {
     }
 
     @Test
-    @DisplayName("래퍼 클래스 예제")
+    @DisplayName("래퍼 클래스 비교 (==, equals)")
     void wrapperExercise() {
         Integer integer1 = new Integer(100);
         Integer integer2 = new Integer(100);
@@ -97,5 +99,35 @@ class WrapperTest {
         assertThatThrownBy(() -> {
             Integer.parseInt("FF"); // 단, 진법을 생략할 경우 10진수로 간주하므로 예외 발생
         }).isInstanceOf(NumberFormatException.class);
+    }
+
+    @Test
+    @DisplayName("오토박싱(AutoBoxing)과 오토언박싱(AutoUnboxing)")
+    void autoboxingUnboxing() {
+        /*
+            << 오토박싱(AutoBoxing)과 오토언박싱(AutoUnboxing) >>
+            - 오토박싱 : 기본형 값을 래퍼 클래스의 객체로 자동 변환해주는 것
+            - 언박싱 : 래퍼 클래스 객체를 기본형 값으로 자동 변환해주는 것
+
+            - JDK 1.5부터 박싱과 언박싱이 필요한 상황에서 자바 컴파일러가 이를 자동으로 처리해주기 때문에
+              기본형과 참조형 간의 연산이 가능해졌다 (컴파일러가 자동으로 변환하는 코드를 추가해준다)
+
+            - 오토박싱을 이용하면 new 키워드를 사용하지 않고도 자동으로 래퍼 클래스 인스턴스를 생성할 수 있으며,
+              반대로 오토언박싱을 이용하여 인스턴스에 저장된 값을 바로 참조할 수 있다
+
+            - 래퍼 클래스의 비교 연산도 오토언박싱을 통해 가능해지지만, 인스턴스에 저장된 값의 동등 여부 판단은
+              비교 연산자인 동등 연산자(==)를 사용해서는 안 되며, equals() 메소드를 사용해야만 한다
+              래퍼 클래스도 객체이므로 동등 연산자(==)를 사용하게 되면, 두 인스턴스의 값을 비교하는 것이 아니라 두 인스턴스의 주소값을 비교하게 된다
+              그러므로 인스턴스에 저장된 값의 동등 여부를 정확히 판단하려면 equals() 메소드를 사용해야만 한다
+         */
+        int i = 100; // 기본형
+        Integer integer = new Integer(200); // 참조형
+
+        List<Integer> integerList = new ArrayList<>();
+        integerList.add(300); // 오토박싱. 300 → new Integer(300)
+        int intValue = integerList.get(0); // 오토언박싱. new Integer(300) → 300
+
+        assertThat(i + integer).isEqualTo(300); // 기본형과 참조형의 연산 (JDK 1.5~)
+        assertThat(intValue).isEqualTo(300);
     }
 }
