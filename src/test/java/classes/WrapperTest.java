@@ -77,4 +77,25 @@ class WrapperTest {
         assertThat(integer1.compareTo(integer2)).isZero();
         assertThat(integer1.compareTo(integer4)).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("문자열을 숫자로 변환하기")
+    void convertStringToNumber() {
+        assertThat((byte) 10).isEqualTo(Byte.parseByte("10")).isEqualTo(Byte.valueOf("10"));
+        assertThat((short) 200).isEqualTo(Short.parseShort("200")).isEqualTo(Short.valueOf("200"));
+        assertThat(10000).isEqualTo(Integer.parseInt("10000")).isEqualTo(Integer.valueOf("10000"));
+        assertThat(20000L).isEqualTo(Long.parseLong("20000")).isEqualTo(Long.valueOf("20000"));
+        assertThat(3.14f).isEqualTo(Float.parseFloat("3.14")).isEqualTo(Float.valueOf("3.14"));
+        assertThat(10.1523).isEqualTo(Double.parseDouble("10.1523")).isEqualTo(Double.valueOf("10.1523"));
+
+        // 다른 진법 숫자로 변환하기
+        assertThat(Integer.parseInt("100", 2)).isEqualTo(4); // 2진법, 100(2) = 4
+        assertThat(Integer.parseInt("100", 8)).isEqualTo(64); // 8진법, 100(8) = 64
+        assertThat(Integer.parseInt("100", 16)).isEqualTo(256); // 16진법, 100(16) = 256
+
+        assertThat(Integer.parseInt("FF", 16)).isEqualTo(255); // 16진법에서는 A ~ F 사이의 문자도 허용
+        assertThatThrownBy(() -> {
+            Integer.parseInt("FF"); // 단, 진법을 생략할 경우 10진수로 간주하므로 예외 발생
+        }).isInstanceOf(NumberFormatException.class);
+    }
 }
