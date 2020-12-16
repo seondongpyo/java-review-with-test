@@ -51,4 +51,30 @@ class WrapperTest {
             Integer intValue = new Integer("1.0"); // 정수가 아닌 실수 값을 전달할 경우
         });
     }
+
+    @Test
+    @DisplayName("래퍼 클래스 예제")
+    void wrapperExercise() {
+        Integer integer1 = new Integer(100);
+        Integer integer2 = new Integer(100);
+        Integer integer3 = new Integer(200);
+        Integer integer4 = new Integer(50);
+
+        assertThat(integer1 == integer2).isFalse(); // 주소 값을 비교
+        assertThat(integer1.equals(integer2)).isTrue(); // 객체가 가지고 있는 값을 비교
+
+        // compareTo() : 매개변수보다 값이 작으면 -1, 같으면 0, 크면 0을 반환
+        /*
+            public int compareTo(Integer anotherInteger) {
+                return compare(this.value, anotherInteger.value);
+            }
+
+            public static int compare(int x, int y) {
+                return x < y ? -1 : (x == y ? 0 : 1);
+            }
+         */
+        assertThat(integer1.compareTo(integer3)).isEqualTo(-1);
+        assertThat(integer1.compareTo(integer2)).isZero();
+        assertThat(integer1.compareTo(integer4)).isEqualTo(1);
+    }
 }
