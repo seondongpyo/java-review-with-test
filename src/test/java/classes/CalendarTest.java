@@ -76,4 +76,29 @@ class CalendarTest {
         assertThat(differenceInSeconds).isEqualTo(604800); // 7일 * 24시간 * 60분 * 60초 = 604800
         assertThat(differenceInDays).isEqualTo(7); // 7일 차이
     }
+
+    @Test
+    @DisplayName("Calendar 클래스 - 예제 3 (두 시간 사이의 차이 구하기)")
+    void calendarExercise3() {
+        Calendar time1 = Calendar.getInstance();
+        time1.set(Calendar.HOUR_OF_DAY, 11);
+        time1.set(Calendar.MINUTE, 30);
+        time1.set(Calendar.SECOND, 50); // 11:30:50
+
+        Calendar time2 = Calendar.getInstance();
+        time2.set(Calendar.HOUR_OF_DAY, 22);
+        time2.set(Calendar.MINUTE, 40);
+        time2.set(Calendar.SECOND, 50); // 22:40:50
+
+        long time1InMillis = time1.getTimeInMillis();
+        long time2InMillis = time2.getTimeInMillis();
+        long differenceInMillis = time2InMillis - time1InMillis;
+        long differenceInSeconds = differenceInMillis / 1000; // 초 단위
+        long differenceInHours = (differenceInMillis / 1000) / 3600; // 시 단위
+        long differenceInMinutes = ((differenceInMillis / 1000) % 3600) / 60; // 분 단위
+
+        assertThat(differenceInSeconds).isEqualTo(40200L);
+        assertThat(differenceInHours).isEqualTo(11L);
+        assertThat(differenceInMinutes).isEqualTo(10L);
+    }
 }
