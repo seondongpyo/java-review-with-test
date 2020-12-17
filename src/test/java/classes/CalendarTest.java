@@ -58,4 +58,22 @@ class CalendarTest {
         assertThat(nowDayOfWeek).isEqualTo(5).isEqualTo(Calendar.THURSDAY);
         assertThat(nowDayOfWeekInMonth).isEqualTo(3);
     }
+
+    @Test
+    @DisplayName("Calendar 클래스 - 예제 2 (두 날짜 간의 차이 구하기)")
+    void calendarExercise2() {
+        Calendar date1 = Calendar.getInstance();
+        Calendar date2 = Calendar.getInstance();
+        date1.set(2020, Calendar.DECEMBER, 17); // 2020년 12월 17일
+        date2.set(2020, Calendar.DECEMBER, 24); // 2020년 12월 24일
+
+        long date1TimeInMillis = date1.getTimeInMillis();
+        long date2TimeInMillis = date2.getTimeInMillis();
+        long differenceInMillis = (date2TimeInMillis - date1TimeInMillis); // 두 날짜간의 차이를 밀리초 단위로 계산
+        long differenceInSeconds = differenceInMillis / 1000; // 초 단위로 계산
+        long differenceInDays = differenceInSeconds / (24 * 60 * 60); // 일 단위로 계산
+
+        assertThat(differenceInSeconds).isEqualTo(604800); // 7일 * 24시간 * 60분 * 60초 = 604800
+        assertThat(differenceInDays).isEqualTo(7); // 7일 차이
+    }
 }
