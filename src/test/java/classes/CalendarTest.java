@@ -101,4 +101,31 @@ class CalendarTest {
         assertThat(differenceInHours).isEqualTo(11L);
         assertThat(differenceInMinutes).isEqualTo(10L);
     }
+
+    @Test
+    @DisplayName("Calendar 클래스 - 예제 4 (날짜 필드 연산)")
+    void calendarExercise4() {
+        Calendar date = Calendar.getInstance();
+        date.set(2020, Calendar.DECEMBER, 31); // 2020년 12월 31일
+
+        // add() : 다른 날짜 필드에 영향을 미친다
+        date.add(Calendar.DATE, 1); // 1일 후 : 2021년 1월 1일
+        assertThat(date.get(Calendar.YEAR)).isEqualTo(2021);
+        assertThat(date.get(Calendar.MONTH)).isEqualTo(Calendar.JANUARY);
+        assertThat(date.get(Calendar.DATE)).isEqualTo(1);
+        
+        date.add(Calendar.MONTH, -5); // 5개월 전 : 2020년 8월 1일
+        assertThat(date.get(Calendar.MONTH)).isEqualTo(Calendar.AUGUST);
+        
+        // roll() : 다른 날짜 필드에 영향을 미치지 않는다
+        // 단, '일'이 말일(end of month)일 떄 roll()을 통해 '월'을 변경하면 '일'에 영향을 미칠 수 있다
+        date.roll(Calendar.DATE, 31); // 31일 후(roll) : 2020년 8월 1일 (9월 X)
+        assertThat(date.get(Calendar.MONTH)).isEqualTo(Calendar.AUGUST).isNotEqualTo(Calendar.SEPTEMBER);
+        assertThat(date.get(Calendar.DATE)).isEqualTo(1);
+
+        date.set(Calendar.DATE, 31); // 2020년 8월 1일에서 말일(31일)로 변경
+        date.roll(Calendar.MONTH, 1); // 2020년 8월에서 2020년 9월로 변경하면?
+        assertThat(date.get(Calendar.MONTH)).isEqualTo(Calendar.SEPTEMBER).isNotEqualTo(Calendar.AUGUST);
+        assertThat(date.get(Calendar.DATE)).isEqualTo(30).isNotEqualTo(31); // 2020년 9월은 말일이 30일이다
+    }
 }
