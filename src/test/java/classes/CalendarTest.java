@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -127,5 +128,34 @@ class CalendarTest {
         date.roll(Calendar.MONTH, 1); // 2020년 8월에서 2020년 9월로 변경하면?
         assertThat(date.get(Calendar.MONTH)).isEqualTo(Calendar.SEPTEMBER).isNotEqualTo(Calendar.AUGUST);
         assertThat(date.get(Calendar.DATE)).isEqualTo(30).isNotEqualTo(31); // 2020년 9월은 말일이 30일이다
+    }
+
+    @Test
+    @DisplayName("Date와 Calendar간의 변환 - Calendar to Date")
+    void calendarToDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2020, Calendar.DECEMBER, 18);
+        Date date = new Date(calendar.getTimeInMillis()); // new Date(long date)
+
+        // Date 클래스의 대부분의 메서드는 deprecated
+        assertThat(date.getYear() + 1900).isEqualTo(2020); // As of JDK version 1.1, replaced by Calendar.get(Calendar.YEAR) - 1900.
+        assertThat(date.getMonth()).isEqualTo(11); // Calendar와 마찬가지로 0부터 1월 시작
+        assertThat(date.getDate()).isEqualTo(18);
+    }
+
+    @Test
+    @DisplayName("Date와 Calendar간의 변환 - Date to Calendar")
+    void dateToCalendar() {
+        Date date = new Date();
+        date.setYear(2020 - 1900); // 연도는 1900년을 기준으로 생성 (2020 입력 시 3920년이 됨)
+        date.setMonth(11);
+        date.setDate(18);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        assertThat(calendar.get(Calendar.YEAR)).isEqualTo(2020);
+        assertThat(calendar.get(Calendar.MONTH)).isEqualTo(Calendar.DECEMBER);
+        assertThat(calendar.get(Calendar.DATE)).isEqualTo(18);
     }
 }
