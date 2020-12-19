@@ -41,13 +41,14 @@ class CollectionTest {
 
         List<String> memberList = new ArrayList<>();
         memberList.add("홍길동");
-        memberList.add("홍길동"); // 데이터의 중복을 허용함
+        boolean isHongGilDongAdded = memberList.add("홍길동"); // 데이터를 추가할 때 성공하면 true, 실패하면 false 반환
 
         assertThat(new ArrayList<>()).isInstanceOf(List.class);
         assertThat(new LinkedList<>()).isInstanceOf(List.class);
         assertThat(new Stack<>()).isInstanceOf(List.class);
         assertThat(new Vector<>()).isInstanceOf(List.class);
         assertThat(memberList).hasSize(2);
+        assertThat(isHongGilDongAdded).isTrue(); // 데이터의 중복을 허용함
         assertThat(memberList.get(0)).isEqualTo("홍길동");
         assertThat(memberList.get(1)).isEqualTo("홍길동");
     }
@@ -65,11 +66,12 @@ class CollectionTest {
         Set<String> memberSet = new HashSet<>();
         memberSet.add("홍길동");
         memberSet.add("고길동");
-        memberSet.add("홍길동"); // 데이터의 중복을 허용하지 않음
+        boolean isHongGilDongAdded = memberSet.add("홍길동"); // 데이터를 추가할 때 성공하면 true, 실패하면 false 반환
 
         assertThat(new HashSet<>()).isInstanceOf(Set.class);
         assertThat(new TreeSet<>()).isInstanceOf(Set.class);
         assertThat(memberSet).hasSize(2);
+        assertThat(isHongGilDongAdded).isFalse(); // 데이터의 중복을 허용하지 않음
     }
     
     @Test
@@ -89,14 +91,15 @@ class CollectionTest {
         memberMap.put("조카", "박희동");
         memberMap.put("옆집사람", "마이콜");
         memberMap.put("세입자", "도우너");
-        memberMap.put("세입자", "둘리"); // 키는 중복을 허용하지 않음, 값이 '도우너'에서 '둘리'가 됨
+        String existingValue = memberMap.put("세입자", "둘리"); // map.put(key, value) : 동일한 키로 데이터('둘리')를 추가할 경우, 기존 값 데이터('도우너')를 반환
         memberMap.put("아기공룡", "둘리"); // 값은 중복을 허용함
 
         assertThat(new HashMap<>()).isInstanceOf(Map.class);
         assertThat(new TreeMap<>()).isInstanceOf(Map.class);
         assertThat(new Hashtable<>()).isInstanceOf(Map.class);
         assertThat(new Properties()).isInstanceOf(Map.class);
-        assertThat(memberMap.get("세입자")).isEqualTo("둘리").isNotEqualTo("도우너");
+        assertThat(memberMap.get("세입자")).isEqualTo("둘리").isNotEqualTo("도우너"); // 키는 중복을 허용하지 않음, 값이 '도우너'에서 '둘리'가 됨
+        assertThat(existingValue).isEqualTo("도우너");
         assertThat(memberMap.get("아기공룡")).isEqualTo("둘리");
     }
 }
