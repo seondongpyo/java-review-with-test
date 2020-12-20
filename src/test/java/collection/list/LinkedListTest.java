@@ -3,6 +3,7 @@ package collection.list;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -103,5 +104,70 @@ class LinkedListTest {
         assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.getLast(); });
         assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.pop(); });
         assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.element(); });
+    }
+
+    @Test
+    @DisplayName("ArrayList vs. LinkedList - 읽기(접근 시간)는 ArrayList가 더 빠르다")
+    void arrayListAndLinkedListSearchTime() {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+
+        for (int i = 0; i < 10000000; i++) {
+            arrayList.add(i);
+            linkedList.add(i);
+        }
+        
+        // 읽기(접근 시간) : ArrayList가 LinkedList보다 빠르다
+        // - 배열은 각 요소들이 연속적으로 메모리상에 존재하기 때문에
+        //   간단한 계산만으로 원하는 요소의 주소를 얻어서 저장된 데이터를 곧바로 읽어올 수 있다
+        // - LinkedList는 불연속적으로 위치한 각 요소들이 서로 연결된 것이라
+        //   처음부터 n번째 데이터까지 차례대로 따라가야만 원하는 값을 얻을 수 있다
+        long arrayListStart = System.currentTimeMillis();
+        arrayList.get(700000);
+        long arrayListEnd = System.currentTimeMillis();
+        long arrayListSearchTime = arrayListEnd - arrayListStart;
+
+        long linkedListStart = System.currentTimeMillis();
+        linkedList.get(700000);
+        long linkedListEnd = System.currentTimeMillis();
+        long linkedListSearchTime = linkedListEnd - linkedListStart;
+        
+        assertThat(arrayListSearchTime).isLessThan(linkedListSearchTime);
+    }
+
+    @Test
+    @DisplayName("ArrayList vs. LinkedList - 추가 및 삭제는 LinkedList가 더 빠르다")
+    void arrayListAndLinkedListAddDeleteTime1() {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+
+        for (int i = 0; i < 10000000; i++) {
+            arrayList.add(i);
+            linkedList.add(i);
+        }
+
+        // 추가 및 삭제 : LinkedList가 ArrayList보다 빠르다 (단, 순차적인 추가 및 삭제는 ArrayList가 더 빠름)
+        long startArrayListAdd = System.currentTimeMillis();
+        arrayList.add(700000, 99999);
+        long endArrayListAdd = System.currentTimeMillis();
+        long arrayListAddTime = endArrayListAdd - startArrayListAdd;
+
+        long startLinkedListAdd = System.currentTimeMillis();
+        linkedList.add(700000, 99999);
+        long endLinkedListAdd = System.currentTimeMillis();
+        long linkedListAddTime = endLinkedListAdd - startLinkedListAdd;
+
+        long startArrayListRemove = System.currentTimeMillis();
+        arrayList.remove(700000);
+        long endArrayListRemove = System.currentTimeMillis();
+        long arrayListRemoveTime = endArrayListRemove - startArrayListRemove;
+
+        long startLinkedListRemove = System.currentTimeMillis();
+        linkedList.remove(700000);
+        long endLinkedListRemove = System.currentTimeMillis();
+        long linkedListRemoveTime = endLinkedListRemove - startLinkedListRemove;
+
+        assertThat(linkedListAddTime).isLessThan(arrayListAddTime);
+        assertThat(linkedListRemoveTime).isLessThan(arrayListRemoveTime);
     }
 }
