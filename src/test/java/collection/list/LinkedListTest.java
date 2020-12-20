@@ -4,8 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LinkedListTest {
     
@@ -43,5 +45,63 @@ class LinkedListTest {
 
         intLinkedList.remove(3);
         assertThat(intLinkedList).containsExactly(0, 1, 5, 3, 4);
+    }
+    
+    @Test
+    @DisplayName("LinkedList 클래스의 메서드")
+    void linkedListMethods() {
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+
+        linkedList.addFirst(0); // 주어진 객체를 맨 앞에 추가 (Inserts the specified element at the beginning of this list.)
+        assertThat(linkedList).containsExactly(0, 1, 2, 3);
+
+        linkedList.offerFirst(-1); // 주어진 객체를 첫 번째 요소로 추가 (Inserts the specified element at the front of this list.)
+        assertThat(linkedList).containsExactly(-1, 0, 1, 2, 3);
+
+        linkedList.addLast(4); // 주어진 객체를 마지막 요소로 추가 (Appends the specified element to the end of this list. This method is equivalent to add.)
+        assertThat(linkedList).containsExactly(-1, 0, 1, 2, 3, 4);
+
+        linkedList.offer(5); // 주어진 객체를 마지막 요소로 추가 (Adds the specified element as the tail (last element) of this list.)
+        assertThat(linkedList).containsExactly(-1, 0, 1, 2, 3, 4, 5);
+
+        assertThat(linkedList.element()).isEqualTo(-1); // 첫 번째 요소 반환 (Retrieves, but does not remove, the head (first element) of this list.)
+        assertThat(linkedList.getFirst()).isEqualTo(-1); // 첫 번째 요소 반환 (Returns the first element in this list.)
+        assertThat(linkedList.getLast()).isEqualTo(5); // 마지막 요소 반환 (Returns the last element in this list.)
+        assertThat(linkedList.peek()).isEqualTo(-1); // 첫 번째 요소 반환 (Retrieves, but does not remove, the head (first element) of this list.)
+        assertThat(linkedList.peekFirst()).isEqualTo(-1); // 첫 번째 요소 반환 (Retrieves, but does not remove, the first element of this list, or returns null if this list is empty.)
+        assertThat(linkedList.peekLast()).isEqualTo(5); // 마지막 요소 반환 (Retrieves, but does not remove, the last element of this list, or returns null if this list is empty.)
+
+        assertThat(linkedList.pop()).isEqualTo(-1); // 첫 번째 요소를 반환하고 LinkedList에서 제거 (Pops an element from the stack represented by this list. In other words, removes and returns the first element of this list. This method is equivalent to removeFirst().)
+        assertThat(linkedList).containsExactly(0, 1, 2, 3, 4, 5);
+
+        assertThat(linkedList.poll()).isEqualTo(0); // 첫 번째 요소를 반환하고 LinkedList에서 제거 (Retrieves and removes the head (first element) of this list.)
+        assertThat(linkedList).containsExactly(1, 2, 3, 4, 5);
+
+        assertThat(linkedList.pollFirst()).isEqualTo(1); // 첫 번째 요소를 반환하고 LinkedList에서 제거 (Retrieves and removes the first element of this list, or returns null if this list is empty.)
+        assertThat(linkedList).containsExactly(2, 3, 4, 5);
+
+        assertThat(linkedList.pollLast()).isEqualTo(5); // 마지막 요소를 반환하고 LinkedList에서 제거 (Retrieves and removes the last element of this list, or returns null if this list is empty.)
+        assertThat(linkedList).containsExactly(2, 3, 4);
+
+        LinkedList<Integer> emptyLinkedList = new LinkedList<>(linkedList);
+        emptyLinkedList.removeAll(linkedList); // LinkedList 비우기 (size : 0)
+        assertThat(emptyLinkedList).hasSize(0);
+        
+        // LinkedList 크기가 0이라면 다음 메서드들은 호출 시 null을 반환한다
+        assertThat(emptyLinkedList.peek()).isNull();
+        assertThat(emptyLinkedList.peekFirst()).isNull();
+        assertThat(emptyLinkedList.peekLast()).isNull();
+        assertThat(emptyLinkedList.poll()).isNull();
+        assertThat(emptyLinkedList.pollFirst()).isNull();
+        assertThat(emptyLinkedList.pollLast()).isNull();
+        
+        // LinkedList 크기가 0이라면 다음 메서드들은 호출 시 예외가 발생한다
+        assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.getFirst(); });
+        assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.getLast(); });
+        assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.pop(); });
+        assertThrows(NoSuchElementException.class, () -> { emptyLinkedList.element(); });
     }
 }
