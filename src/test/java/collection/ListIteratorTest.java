@@ -1,6 +1,5 @@
 package collection;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ListIteratorTest {
@@ -151,5 +151,34 @@ class ListIteratorTest {
         assertThrows(IllegalStateException.class, () -> {
             listIterator.remove();
         });
+    }
+
+    @Test
+    @DisplayName("ListIterator 인터페이스 previous() - 리스트에서 커서 앞의 요소 반환")
+    void previous() {
+        /*
+            Returns the previous element in the list and moves the cursor position backwards.
+
+            -> 커서 앞(왼쪽)의 요소를 반환하고 커서를 앞으로 한 칸 옮긴다
+         */
+        list.add(1); // |1
+        list.add(2); // |1 2
+        list.add(3); // |1 2 3
+
+        ListIterator<Integer> listIterator = list.listIterator();
+
+        assertThrows(NoSuchElementException.class, () -> {
+            listIterator.previous(); // 커서가 리스트의 맨 앞에 위치할 때 previous() 호출 시 예외 발생
+        });
+
+        listIterator.next(); // 1 |2 3
+        listIterator.next(); // 1 2 |3
+
+        assertThat(listIterator.previous()).isEqualTo(2); // 커서 앞의 요소인 2 반환 후 커서 이동 (1 |2 3)
+        assertThat(listIterator.previous()).isEqualTo(1); // 커서 앞의 요소인 1 반환 후 커서 이동 (|1 2 3)
+        assertThat(listIterator.hasPrevious()).isFalse(); // 커서 앞의 요소가 없으므로 false
+        assertThatThrownBy(() -> {
+            listIterator.previous();
+        }).isInstanceOf(NoSuchElementException.class); // 커서가 맨 앞에 위치하므로 previous() 호출 시 예외 발생
     }
 }
