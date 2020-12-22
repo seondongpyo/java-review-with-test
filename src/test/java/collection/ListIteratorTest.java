@@ -1,5 +1,6 @@
 package collection;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ListIteratorTest {
 
@@ -70,4 +73,83 @@ class ListIteratorTest {
         assertThat(list).containsExactly(1, 3, 2, 4, 5).hasSize(5);
     }
 
+    @Test
+    @DisplayName("ListIterator 인터페이스 remove() - 리스트에서 요소 삭제 (1)")
+    void remove_1() {
+        /*
+            Removes from the list the last element that was returned by next() or previous() (optional operation).
+            This call can only be made once per call to next or previous.
+            It can be made only if add(E) has not been called after the last call to next or previous.
+
+            -> next() 또는 previous() 호출에 의해 반환된 마지막 요소를 리스트에서 삭제
+         */
+
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        ListIterator<Integer> listIterator = list.listIterator();
+        assertThat(listIterator.next()).isEqualTo(1);
+        assertThat(listIterator.next()).isEqualTo(2);
+        assertThat(listIterator.next()).isEqualTo(3);
+
+        // remove() 호출 시, next()에 의해 마지막으로 반환된 요소(3)가 삭제된다
+        listIterator.remove();
+
+        assertThat(list).containsExactly(1, 2).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("ListIterator 인터페이스 remove() - 리스트에서 요소 삭제 (2)")
+    void remove_2() {
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        // 현재 리스트 : |1 2 3
+
+        ListIterator<Integer> listIterator = list.listIterator();
+        assertThat(listIterator.next()).isEqualTo(1); // 1 |2 3 (커서를 오른쪽으로 이동)
+        assertThat(listIterator.next()).isEqualTo(2); // 1 2 |3 (커서를 오른쪽으로 이동)
+        assertThat(listIterator.previous()).isEqualTo(2); // 1 |2 3 (커서를 왼쪽으로 이동)
+        assertThat(listIterator.previous()).isEqualTo(1); // |1 2 3 (커서를 왼쪽으로 이동)
+
+        // remove() 호출 시, next() 또는 previous()에 의해 마지막으로 반환된 값인 1이 삭제된다
+        listIterator.remove();
+
+        assertThat(list).containsExactly(2, 3).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("ListIterator 인터페이스 remove() - 리스트에서 요소 삭제 (3)")
+    void remove_3() {
+        list.add(1);
+        list.add(2);
+        // 현재 리스트 : |1 2
+
+        /*
+            if neither next nor previous have been called,
+            or remove or add have been called after the last call to next or previous
+
+            ->  1) next() 또는 previous()가 호출된 적이 없을 때, 또는
+                2) next() 또는 previous()의 마지막 호출 이후 add()가 호출됐을 때 (remove()는 잘 모르겠음)
+                IllegalStateException 예외 발생
+         */
+        ListIterator<Integer> listIterator = list.listIterator();
+
+        // 1) next() 또는 previous()가 호출되기 전에 remove()를 호출하면 예외 발생
+        assertThrows(IllegalStateException.class, () -> {
+            listIterator.remove();
+        });
+
+        // 2) next() 또는 previous()의 마지막 호출 이후 add() 호출 시
+        assertThat(listIterator.next()).isEqualTo(1); // 1 |2
+        listIterator.remove(); // next() 호출에 의해 반환된 1 삭제 -> |2
+
+        assertThat(listIterator.next()).isEqualTo(2); // 2 |
+        listIterator.remove(); // next() 호출에 의해 반환된 2 삭제 -> |
+
+        assertThrows(IllegalStateException.class, () -> {
+            listIterator.remove();
+        });
+    }
 }
