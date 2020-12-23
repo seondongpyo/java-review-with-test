@@ -3,9 +3,12 @@ package array;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ArraysTest {
 
@@ -64,5 +67,21 @@ class ArraysTest {
         int[][] array2 = {{1, 2}, {3, 4}};
 
         assertThat(Arrays.deepEquals(array1, array2)).isTrue();
+    }
+
+    @Test
+    @DisplayName("Arrays 클래스 asList() - 배열을 List로 변환")
+    void asList() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        assertThat(list).hasSize(5);
+
+        // <주의> asList()에 의해 반환된 List의 크기는 변경할 수 없다
+        // 즉, 추가 또는 삭제가 불가능하지만 저장된 내용은 변경할 수 있다
+        assertThatThrownBy(() -> list.add(6)).isInstanceOf(UnsupportedOperationException.class);
+
+        // Q. 크기를 변경할 수 있는 List가 필요한 경우에는?
+        ArrayList<Integer> arrayList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+        assertThat(arrayList.add(6)).isTrue(); // 요소 추가 가능
+        assertThat(arrayList).hasSize(6);
     }
 }
