@@ -1,5 +1,6 @@
 package collection.set;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -127,5 +128,38 @@ class HashSetTest {
         }
 
         assertThat(hashSet.containsAll(arrayList)).isTrue();
+    }
+
+    @Test
+    @DisplayName("HashSet 클래스 remove() - 지정된 객체를 삭제")
+    void remove() {
+        HashSet<Integer> hashSet = new HashSet<>();
+
+        for (int i = 0; i < 10; i++) {
+            hashSet.add(i);
+        }
+
+        assertThat(hashSet.remove(9)).isTrue(); // 삭제가 성공하면 true 반환
+        assertThat(hashSet.remove(10)).isFalse(); // 삭제가 실패하면 false 반환
+        assertThat(hashSet).hasSize(9); // 0 ~ 9까지의 총 10개의 숫자 중 9를 삭제했으므로 남은 요소는 9개
+    }
+    
+    @Test
+    @DisplayName("HashSet 클래스 removeAll() - 주어진 컬렉션에 저장된 모든 객체와 동일한 요소들을 모두 삭제")
+    void removeAll() {
+        HashSet<Integer> hashSet = new HashSet<>();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            hashSet.add(i); // 0 ~ 9까지 저장
+
+            if (i > 2 && i < 8) {
+                arrayList.add(i); // 3 ~ 7까지 저장
+            }
+        }
+
+        assertThat(hashSet.removeAll(arrayList)).isTrue(); // 0 ~ 9까지의 숫자들 중 3 ~ 7까지의 숫자들을 삭제 -> 0, 1, 2, 8, 9
+        assertThat(hashSet.removeAll(arrayList)).isFalse(); // 주어진 컬렉션에 저장된 요소들과 동일한 요소가 하나도 없을 경우 삭제 실패
+        assertThat(hashSet).containsExactlyInAnyOrder(0, 1, 2, 8, 9);
     }
 }
