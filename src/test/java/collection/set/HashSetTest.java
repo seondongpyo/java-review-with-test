@@ -3,6 +3,7 @@ package collection.set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -99,5 +100,32 @@ class HashSetTest {
         // Q. {1, 2, 3}이 저장된 상태에서 {1, 2, 3}을 저장하려고 한다면?
         boolean isAdded2 = hashSet3.addAll(hashSet1); // 추가하려는 요소들이 모두 중복된 요소라면 추가 실패
         assertThat(isAdded2).isFalse();
+    }
+
+    @Test
+    @DisplayName("HashSet 클래스 contains() - 지정된 객체를 포함하고 있는지 확인")
+    void contains() {
+        HashSet<Integer> hashSet = new HashSet<>();
+
+        for (int i = 0; i < 10; i++) {
+            hashSet.add(i);
+        }
+
+        assertThat(hashSet.contains(9)).isTrue();
+        assertThat(hashSet.contains(10)).isFalse();
+    }
+
+    @Test
+    @DisplayName("HashSet 클래스 containsAll() - 주어진 컬렉션에 저장된 모든 객체들을 포함하고 있는지 확인")
+    void containsAll() {
+        HashSet<Integer> hashSet = new HashSet<>();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            hashSet.add(i);
+            arrayList.add(i);
+        }
+
+        assertThat(hashSet.containsAll(arrayList)).isTrue();
     }
 }
