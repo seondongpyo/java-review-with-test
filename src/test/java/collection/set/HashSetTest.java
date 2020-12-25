@@ -1,11 +1,11 @@
 package collection.set;
 
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,6 +74,25 @@ class HashSetTest {
         assertThat(str1.hashCode()).isEqualTo(str2.hashCode()); // 같은 문자열일 경우 해시 코드 값이 동일하다
         assertThat(isAdded).isFalse(); // str1과 같은 문자열을 가진 str2는 중복 요소로 간주하여 저장되지 않는다
         assertThat(hashSet).hasSize(1);
+    }
+    
+    @Test
+    @DisplayName("HashSet 클래스 add() - hashCode()와 equals() 오버라이딩을 통한 중복 저장 방지")
+    void add_3() {
+        // 1) hashCode(), equals()를 오버라이딩하지 않은 경우
+        HashSet<Person1> person1HashSet = new HashSet<>();
+        person1HashSet.add(new Person1("고길동", 40));
+        boolean isPerson1Added = person1HashSet.add(new Person1("고길동", 40)); // 중복 저장 시도
+
+        // 2) hashCode(), equals()를 오버라이딩한 경우
+        HashSet<Person2> person2HashSet = new HashSet<>();
+        person2HashSet.add(new Person2("홍길동", 30));
+        boolean isPerson2Added = person2HashSet.add(new Person2("홍길동", 30)); // 중복 저장 시도
+
+        assertThat(isPerson1Added).isTrue(); // 기존에 저장된 인스턴스와 서로 다른 인스턴스로 인식하여 저장이 됨
+        assertThat(person1HashSet).hasSize(2); // 서로 다른 Person1 인스턴스가 2개 저장
+        assertThat(isPerson2Added).isFalse(); // 기존에 저장된 인스턴스와 같은 인스턴스로 인식하여 저장이 되지 않음
+        assertThat(person2HashSet).hasSize(1); // 같은 Person2 인스턴스가 1개만 저장
     }
     
     @Test
@@ -180,5 +199,40 @@ class HashSetTest {
         assertThat(hashSet.retainAll(arrayList)).isTrue(); // 0 ~ 9까지의 숫자들 중 4 ~ 8까지의 숫자를 제외한 나머지 숫자들을 제거
         assertThat(hashSet.retainAll(arrayList)).isFalse(); // 주어진 컬렉션에 저장된 요소들과 모두 동일하므로, 삭제할 요소가 없어서 실패
         assertThat(hashSet).containsExactlyInAnyOrder(4, 5, 6, 7, 8);
+    }
+}
+
+class Person1 {
+
+    private String name;
+    private int age;
+
+    public Person1(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+class Person2 {
+
+    private String name;
+    private int age;
+
+    public Person2(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person2 person = (Person2) o;
+        return age == person.age && Objects.equals(name, person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
     }
 }
