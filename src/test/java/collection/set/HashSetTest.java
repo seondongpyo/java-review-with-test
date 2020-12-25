@@ -162,4 +162,23 @@ class HashSetTest {
         assertThat(hashSet.removeAll(arrayList)).isFalse(); // 주어진 컬렉션에 저장된 요소들과 동일한 요소가 하나도 없을 경우 삭제 실패
         assertThat(hashSet).containsExactlyInAnyOrder(0, 1, 2, 8, 9);
     }
+    
+    @Test
+    @DisplayName("HashSet 클래스 retainAll() - 주어진 컬렉션에 저장된 객체와 동일한 요소들만 남기고 나머지를 삭제")
+    void retainAll() {
+        HashSet<Integer> hashSet = new HashSet<>();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            hashSet.add(i); // 0 ~ 9까지 저장
+
+            if (i > 3 && i < 9) {
+                arrayList.add(i); // 4 ~ 8까지 저장
+            }
+        }
+
+        assertThat(hashSet.retainAll(arrayList)).isTrue(); // 0 ~ 9까지의 숫자들 중 4 ~ 8까지의 숫자를 제외한 나머지 숫자들을 제거
+        assertThat(hashSet.retainAll(arrayList)).isFalse(); // 주어진 컬렉션에 저장된 요소들과 모두 동일하므로, 삭제할 요소가 없어서 실패
+        assertThat(hashSet).containsExactlyInAnyOrder(4, 5, 6, 7, 8);
+    }
 }
