@@ -1,15 +1,12 @@
 package collection.set;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.NavigableSet;
-import java.util.Set;
 import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
 
 class TreeSetTest {
 
@@ -76,7 +73,7 @@ class TreeSetTest {
 
         // 현재 TreeSet : 2, 3, 6, 7, 9
         Integer matched = treeSet.floor(7); // 1) 같은 값인 7를 반환
-        Integer theLeast = treeSet.floor(5); // 2) 5가 없으므로, 4보다 작은 값(2, 3) 중 가장 가까운 값인 3을 반환
+        Integer theLeast = treeSet.floor(5); // 2) 5가 없으므로, 5보다 작은 값(2, 3) 중 가장 가까운 값인 3을 반환
         Integer notMatched = treeSet.floor(1); // 3) 1보다 같거나 작은 값이 둘 다 없으므로 null 반환
 
         assertThat(matched).isEqualTo(7);
