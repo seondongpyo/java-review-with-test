@@ -60,6 +60,31 @@ class TreeSetTest {
     }
 
     @Test
+    @DisplayName("TreeSet 클래스 floor() - 지정된 객체와 같은 객체를 반환")
+    void floor() {
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(3);
+        treeSet.add(6);
+
+        /*
+            Returns the greatest key less than or equal to the given key, or null if there is no such key.
+            -> 지정된 객체와 같거나 혹은 작은 값 중 가장 가까운 값의 객체를 반환하는데, 그런 객체가 없다면 null을 반환
+         */
+
+        // 현재 TreeSet : 2, 3, 6, 7, 9
+        Integer matched = treeSet.floor(7); // 1) 같은 값인 7를 반환
+        Integer theLeast = treeSet.floor(5); // 2) 5가 없으므로, 4보다 작은 값(2, 3) 중 가장 가까운 값인 3을 반환
+        Integer notMatched = treeSet.floor(1); // 3) 1보다 같거나 작은 값이 둘 다 없으므로 null 반환
+
+        assertThat(matched).isEqualTo(7);
+        assertThat(theLeast).isEqualTo(3);
+        assertThat(notMatched).isNull();
+    }
+
+    @Test
     @DisplayName("TreeSet 클래스 descendingSet() - 저장된 요소들을 역순으로 정렬하여 반환")
     void descendingSet() {
         TreeSet<Integer> treeSet = new TreeSet<>();
