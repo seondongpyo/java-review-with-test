@@ -112,6 +112,14 @@ class TreeSetTest {
         treeSet.add(1);
         treeSet.add(6);
 
+        /*
+            public SortedSet<E> headSet(E toElement) {
+                return headSet(toElement, false);
+            }
+
+            -> headSet()은 inclusive 기본값이 false
+         */
+
         SortedSet<Integer> sortedSet = treeSet.headSet(7); // 7보다 작은 값들을 반환 (1, 2, 6)
         NavigableSet<Integer> navigableSet = treeSet.headSet(7, true); // inclusive가 true면 같은 값도 포함
 
@@ -119,6 +127,32 @@ class TreeSetTest {
         assertThat(sortedSet).containsExactly(1, 2, 6);
         assertThat(navigableSet).hasSize(4);
         assertThat(navigableSet).containsExactly(1, 2, 6, 7);
+    }
+
+    @Test
+    @DisplayName("TreeSet 클래스 tailSet() - 지정된 객체와 같거나 큰 값의 객체들을 반환")
+    void tailSet() {
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(1);
+        treeSet.add(6);
+
+        /*
+            public SortedSet<E> tailSet(E fromElement) {
+                return tailSet(fromElement, true);
+            }
+
+            -> tailSet()은 inclusive 기본값이 true
+         */
+
+        SortedSet<Integer> sortedSet = treeSet.tailSet(6); // 6보다 크거나 큰 값들을 반환 (6, 7, 9)
+        NavigableSet<Integer> navigableSet = treeSet.tailSet(6, false); // inclusive가 false면 같은 값을 미포함
+
+        assertThat(sortedSet).hasSize(3);
+        assertThat(sortedSet).containsExactly(6, 7, 9);
+        assertThat(navigableSet).hasSize(2);
+        assertThat(navigableSet).containsExactly(7, 9);
     }
 
     @Test
