@@ -1,12 +1,16 @@
 package collection.set;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.NavigableSet;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.not;
 
 class TreeSetTest {
 
@@ -95,5 +99,24 @@ class TreeSetTest {
         NavigableSet<Integer> descendingSet = treeSet.descendingSet();
 
         assertThat(descendingSet).containsExactly(9, 7, 6, 2, 1);
+    }
+
+    @Test
+    @DisplayName("TreeSet 클래스 headSet() - 지정된 객체보다 작은 값의 객체들을 반환")
+    void headSet() {
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(1);
+        treeSet.add(6);
+
+        SortedSet<Integer> sortedSet = treeSet.headSet(7); // 7보다 작은 값들을 반환 (1, 2, 6)
+        NavigableSet<Integer> navigableSet = treeSet.headSet(7, true); // inclusive가 true면 같은 값도 포함
+
+        assertThat(sortedSet).hasSize(3);
+        assertThat(sortedSet).containsExactly(1, 2, 6);
+        assertThat(navigableSet).hasSize(4);
+        assertThat(navigableSet).containsExactly(1, 2, 6, 7);
     }
 }
