@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -58,4 +59,19 @@ class TreeSetTest {
         assertThat(notMatched).isNull();
     }
 
+    @Test
+    @DisplayName("TreeSet 클래스 descendingSet() - 저장된 요소들을 역순으로 정렬하여 반환")
+    void descendingSet() {
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(1);
+        treeSet.add(6);
+
+        // (1, 2, 6, 7, 9) -> (9, 7, 6, 2, 1)
+        NavigableSet<Integer> descendingSet = treeSet.descendingSet();
+
+        assertThat(descendingSet).containsExactly(9, 7, 6, 2, 1);
+    }
 }
