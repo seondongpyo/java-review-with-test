@@ -152,4 +152,37 @@ class TreeSetTest {
         assertThat(higher).isEqualTo(6);
         assertThat(notMatched).isNull();
     }
+    
+    @Test
+    @DisplayName("TreeSet 클래스 subSet() - 범위 검색의 결과를 반환 (끝 범위는 포함되지 않음)")
+    void subSet() {
+        treeSet.add(1);
+        treeSet.add(3);
+        treeSet.add(4);
+        treeSet.add(7);
+        treeSet.add(9);
+        treeSet.add(10);
+
+        SortedSet<Integer> sortedSet = treeSet.subSet(3, 10); // 3부터 10 사이의 결과를 반환 (10은 포함되지 않음)
+
+        assertThat(sortedSet).hasSize(4);
+        assertThat(sortedSet).containsExactly(3, 4, 7, 9);
+    }
+    
+    @Test
+    @DisplayName("TreeSet 클래스 subSet() - inclusive에 따라 범위 값의 포함 유무를 결정할 수 있다")
+    void subSet_inclusive() {
+        treeSet.add(1);
+        treeSet.add(3);
+        treeSet.add(4);
+        treeSet.add(7);
+        treeSet.add(9);
+        treeSet.add(10);
+
+        // 3부터 10 사이의 범위 검색 결과를 반환하되, 3은 포함하지 않고 10은 포함한다
+        NavigableSet<Integer> navigableSet = treeSet.subSet(3, false, 10, true);
+
+        assertThat(navigableSet).hasSize(4);
+        assertThat(navigableSet).containsExactly(4, 7, 9, 10);
+    }
 }
