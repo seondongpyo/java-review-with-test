@@ -1,16 +1,14 @@
 package collection.set;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.NavigableSet;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
 
 class TreeSetTest {
 
@@ -35,10 +33,16 @@ class TreeSetTest {
           오름차순으로 정렬된 순서를 얻을 수 있다
      */
 
+    private TreeSet<Integer> treeSet;
+
+    @BeforeEach
+    void initTreeSet() {
+        treeSet = new TreeSet<>();
+    }
+
     @Test
     @DisplayName("TreeSet 클래스 ceiling() - 지정된 객체와 같은 객체를 반환")
     void ceiling() {
-        TreeSet<Integer> treeSet = new TreeSet<>();
         treeSet.add(7);
         treeSet.add(2);
         treeSet.add(9);
@@ -63,7 +67,6 @@ class TreeSetTest {
     @Test
     @DisplayName("TreeSet 클래스 floor() - 지정된 객체와 같은 객체를 반환")
     void floor() {
-        TreeSet<Integer> treeSet = new TreeSet<>();
         treeSet.add(7);
         treeSet.add(2);
         treeSet.add(9);
@@ -88,7 +91,6 @@ class TreeSetTest {
     @Test
     @DisplayName("TreeSet 클래스 descendingSet() - 저장된 요소들을 역순으로 정렬하여 반환")
     void descendingSet() {
-        TreeSet<Integer> treeSet = new TreeSet<>();
         treeSet.add(7);
         treeSet.add(2);
         treeSet.add(9);
@@ -104,7 +106,6 @@ class TreeSetTest {
     @Test
     @DisplayName("TreeSet 클래스 headSet() - 지정된 객체보다 작은 값의 객체들을 반환")
     void headSet() {
-        TreeSet<Integer> treeSet = new TreeSet<>();
         treeSet.add(7);
         treeSet.add(2);
         treeSet.add(9);
@@ -118,5 +119,37 @@ class TreeSetTest {
         assertThat(sortedSet).containsExactly(1, 2, 6);
         assertThat(navigableSet).hasSize(4);
         assertThat(navigableSet).containsExactly(1, 2, 6, 7);
+    }
+
+    @Test
+    @DisplayName("TreeSet 클래스 higher() - 지정된 객체보다 큰 값을 가진 객체 중 제일 가까운 값의 객체를 반환, 없으면 null")
+    void higher() {
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(1);
+        treeSet.add(6);
+
+        Integer higher = treeSet.higher(3); // 3보다 큰 값을 가진 객체(6, 7, 9) 중 제일 가까운 값인 6을 반환
+        Integer notMatched = treeSet.higher(10);// 10보다 큰 값을 가진 객체는 없으므로 null 반환
+
+        assertThat(higher).isEqualTo(6);
+        assertThat(notMatched).isNull();
+    }
+
+    @Test
+    @DisplayName("TreeSet 클래스 lower() - 지정된 객체보다 작은 값을 가진 객체 중 제일 가까운 값의 객체를 반환, 없으면 null")
+    void lower() {
+        treeSet.add(7);
+        treeSet.add(2);
+        treeSet.add(9);
+        treeSet.add(3);
+        treeSet.add(6);
+
+        Integer higher = treeSet.lower(7); // 7보다 작은 값을 가진 객체(2, 3, 6) 중 제일 가까운 값인 6을 반환
+        Integer notMatched = treeSet.lower(1);// 1보다 작은 값을 가진 객체는 없으므로 null 반환
+
+        assertThat(higher).isEqualTo(6);
+        assertThat(notMatched).isNull();
     }
 }
