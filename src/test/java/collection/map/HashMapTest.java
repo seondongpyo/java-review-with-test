@@ -48,4 +48,20 @@ class HashMapTest {
         assertThat(newUsers).hasSize(5);
         assertThat(newUsers).containsValues("김길동", "이길동", "최길동", "홍길동", "박길동");
     }
+
+    @Test
+    @DisplayName("HashMap 클래스 getOrDefault() - 지정된 키의 값을 반환하되, 키를 못 찾으면 기본값으로 지정된 객체를 반환")
+    void getOrDefault() {
+        HashMap<Integer, String> users = new HashMap<>();
+        users.put(1, "김길동");
+        users.put(2, "이길동");
+        users.put(3, "최길동");
+        users.put(4, "홍길동");
+
+        String findUser1 = users.getOrDefault(4, "비회원");
+        String findUser2 = users.getOrDefault(5, "비회원");
+
+        assertThat(findUser1).isEqualTo("홍길동");
+        assertThat(findUser2).isEqualTo("비회원");
+    }
 }
