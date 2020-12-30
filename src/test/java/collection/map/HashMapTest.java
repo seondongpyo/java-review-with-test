@@ -64,4 +64,23 @@ class HashMapTest {
         assertThat(findUser1).isEqualTo("홍길동");
         assertThat(findUser2).isEqualTo("비회원");
     }
+
+    @Test
+    @DisplayName("HashMap 클래스 replace() - 지정된 키의 값을 지정된 객체(값)로 대체")
+    void replace() {
+        HashMap<Integer, String> users = new HashMap<>();
+        users.put(1, "김길동");
+        users.put(2, "이길동");
+        users.put(3, "최길동");
+        users.put(4, "홍길동");
+
+        String oldValue = users.replace(4, "박길동"); // 지정된 키의 값을 성공적으로 바꿨으면 기존 값을 반환
+        boolean isReplaced1 = users.replace(1, "김길동", "염길동"); // 지정된 키와 객체(oldValue)가 모두 일치하는 경우에만 새 객체(newValue)로 대체
+        boolean isReplaced2 = users.replace(2, "김길동", "염길동"); // 키(2)에 대한 객체는 '김길동'이 아닌 '이길동'이므로 대체하지 않음
+
+        assertThat(oldValue).isEqualTo("홍길동");
+        assertThat(users.get(4)).isEqualTo("박길동");
+        assertThat(isReplaced1).isTrue();
+        assertThat(isReplaced2).isFalse();
+    }
 }
