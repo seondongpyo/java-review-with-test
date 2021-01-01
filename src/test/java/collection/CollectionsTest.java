@@ -20,4 +20,15 @@ class CollectionsTest {
             unmodifiableList.add(1); // 변경불가 상태인 컬렉션에 요소를 저장하려고 할 경우
         });
     }
+
+    @Test
+    @DisplayName("Collections 클래스 - 싱글톤(단 하나의 객체만을 저장하는) 컬렉션 만들기")
+    void singletonCollection() {
+        String str = "Singleton";
+        List<String> singletonList = Collections.singletonList(str);
+
+        assertThrows(UnsupportedOperationException.class, () -> {
+            singletonList.add("another string"); // 싱글톤 컬렉션에 요소를 저장하려고 할 경우
+        });
+    }
 }
