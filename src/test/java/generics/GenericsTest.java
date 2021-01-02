@@ -46,6 +46,36 @@ class GenericsTest {
         assertThat(integerBox.getItem()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("제네릭 타입과 다형성")
+    void genericsPolymorphism() {
+        ArrayList<Fruit> fruitBox = new ArrayList<>();
+        fruitBox.add(new Apple());
+        fruitBox.add(new Orange());
+        fruitBox.add(new Grape());
+        fruitBox.add(new Strawberry());
+
+        assertThat(fruitBox.get(0)).isInstanceOf(Apple.class).isInstanceOf(Fruit.class);
+        assertThat(fruitBox.get(1)).isInstanceOf(Orange.class).isInstanceOf(Fruit.class);
+        assertThat(fruitBox.get(2)).isInstanceOf(Grape.class).isInstanceOf(Fruit.class);
+        assertThat(fruitBox.get(3)).isInstanceOf(Strawberry.class).isInstanceOf(Fruit.class);
+        assertThat(fruitBox).hasOnlyElementsOfType(Fruit.class);
+    }
+
+    @Test
+    @DisplayName("제네릭 클래스에서 타입 제한하기")
+    void genericsType() {
+        FruitBox<Fruit> fruitBox = new FruitBox<>();
+//        fruitBox.add(new String()); // 컴파일 에러 : String 클래스는 Fruit 클래스를 상속하지 않는다
+
+        fruitBox.add(new Apple());
+        fruitBox.add(new Orange());
+        fruitBox.add(new Grape());
+        fruitBox.add(new Strawberry());
+
+        assertThat(fruitBox.getFruits()).hasOnlyElementsOfType(Fruit.class);
+    }
+
     static class Box<T> {
         // 'Box<T>' : 제네릭 클래스
         // 'Box' : 원시 타입
@@ -61,5 +91,22 @@ class GenericsTest {
             return item;
         }
     }
-    
+
+    static class FruitBox<T extends Fruit> { // Fruit 클래스의 자손들만 담게끔 타입 변수를 제한
+        ArrayList<T> list = new ArrayList<>();
+
+        public void add(T t) {
+            list.add(t);
+        }
+
+        public ArrayList<T> getFruits() {
+            return list;
+        }
+    }
+
+    static class Fruit {}
+    static class Apple extends Fruit {}
+    static class Orange extends Fruit {}
+    static class Grape extends Fruit {}
+    static class Strawberry extends Fruit {}
 }
