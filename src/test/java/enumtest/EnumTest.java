@@ -69,6 +69,15 @@ class EnumTest {
         assertThat(directions[3]).isEqualTo(Direction.NORTH);
     }
 
+    @Test
+    @DisplayName("열거형에 멤버 추가하기")
+    void addEnumMember() {
+        assertThat(Direction.EAST.arrow).isEqualTo("→");
+        assertThat(Direction.WEST.arrow).isEqualTo("←");
+        assertThat(Direction.SOUTH.arrow).isEqualTo("↓");
+        assertThat(Direction.NORTH.arrow).isEqualTo("↑");
+    }
+
     static class Unit {
         Direction direction;
 
@@ -78,6 +87,18 @@ class EnumTest {
     }
 
     enum Direction {
-        EAST, WEST, SOUTH, NORTH
+        // 1) 열거형 상수의 값이 불규칙한 경우, 열거형 상수의 이름 옆에 원하는 값을 괄호와 함께 적어준다
+        EAST("→"), WEST("←"), SOUTH("↓"), NORTH("↑"); // 끝에 ';' 추가
+
+        // 2) 지정된 값을 저장할 수 있는 인스턴스 변수와 생성자를 새로 추가한다
+        private final String arrow; // 정수를 저장할 필드 추가, 반드시 final이어야 하는 제약은 없음
+
+        Direction(String arrow) { // 생성자 추가
+            this.arrow = arrow;
+        }
+
+        public String getArrow() {
+            return arrow;
+        }
     }
 }
