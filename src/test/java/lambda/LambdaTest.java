@@ -28,7 +28,7 @@ class LambdaTest {
      */
 
     @Test
-    @DisplayName("람다식 작성하기 - 두 숫자 중 최대값 구하기")
+    @DisplayName("람다식 작성하기 - 두 숫자를 더한 값 구하기")
     void lambda() {
         // 람다식 미사용
 //        Calculator calculator = new Calculator() {
