@@ -46,8 +46,24 @@ class LambdaTest {
         assertThat(addValue).isEqualTo(30);
     }
 
+    @Test
+    @DisplayName("람다식 작성하기 - 주사위 굴리기")
+    void diceRolling() {
+        Dice dice = () -> {
+            return (int) (Math.random() * 6 + 1); // 'return'과 '{}' 생략 가능
+        };
+
+        int number = dice.roll();
+
+        assertThat(number).isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(6);
+    }
+
     interface Calculator {
         int add(int a, int b);
+    }
+
+    interface Dice {
+        int roll();
     }
     
 }
