@@ -1,6 +1,5 @@
 package lambda;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,10 +38,39 @@ class FunctionalInterfaceTest {
         assertThat(value2).isEqualTo(30);
     }
 
+    @Test
+    @DisplayName("함수형 인터페이스 타입의 매개변수, 반환 타입")
+    void functionalInterfaceParamReturnType() {
+        NewFunction nf = getNewFunction();
+        int value = nf.max(10, 20);
+
+        MyFunction mf = () -> { return "MyFunction"; };
+        String name = execute(mf);
+
+        assertThat(value).isEqualTo(20);
+        assertThat(name).isEqualTo("MyFunction");
+    }
+
+    // 매개변수가 MyFunction인 메서드
+    private String execute(MyFunction mf) {
+        return mf.run();
+    }
+
+    // 반환 타입이 NewFunction인 메서드
+    private NewFunction getNewFunction() {
+        NewFunction nf = (int a, int b) -> Math.max(a, b);
+        return nf;
+    }
+
     // 함수형 인터페이스 정의
     @FunctionalInterface
     interface NewFunction {
         int max(int a, int b);
 //        int min(int a, int b); //  함수형 인터페이스에는 하나의 추상 메서드만 정의되어 있어야 한다
+    }
+
+    @FunctionalInterface
+    interface MyFunction {
+        String run();
     }
 }
