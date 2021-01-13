@@ -3,6 +3,9 @@ package lambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -77,5 +80,26 @@ class FunctionTest {
         Supplier<Integer> randomNumberMaker = () -> (int) (Math.random() * 10);
 
         assertThat(randomNumberMaker.get()).isLessThan(10);
+    }
+
+    @Test
+    @DisplayName("java.util.function 패키지 - Consumer<T>")
+    void consumer() {
+        /*
+            << Consumer<T> >>
+            - 매개변수만 있고, 반환값이 없는 함수 (Supplier와 반대)
+         */
+
+        List<Integer> numbers = new ArrayList<>();
+
+        // 전달한 매개변수의 10배에 해당하는 숫자를 리스트에 저장하는 함수
+        Consumer<Integer> addTenfoldNumber = i -> numbers.add(i * 10);
+        addTenfoldNumber.accept(1);
+        addTenfoldNumber.accept(2);
+        addTenfoldNumber.accept(3);
+
+        assertThat(numbers).contains(10);
+        assertThat(numbers).contains(20);
+        assertThat(numbers).contains(30);
     }
 }
