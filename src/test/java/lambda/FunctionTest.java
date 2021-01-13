@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,5 +63,19 @@ class FunctionTest {
 
         assertThat(isEmptyString.test(str1)).isTrue();
         assertThat(isEmptyString.test(str2)).isFalse();
+    }
+
+    @Test
+    @DisplayName("java.util.function 패키지 - Supplier<T>")
+    void supplier() {
+        /*
+            << Supplier<T> >>
+            - 매개변수가 없고, 반환값만 있는 함수
+         */
+
+        // 무작위로 10보다 작은 숫자를 반환하는 함수
+        Supplier<Integer> randomNumberMaker = () -> (int) (Math.random() * 10);
+
+        assertThat(randomNumberMaker.get()).isLessThan(10);
     }
 }
