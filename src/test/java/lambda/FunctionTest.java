@@ -102,4 +102,24 @@ class FunctionTest {
         assertThat(numbers).contains(20);
         assertThat(numbers).contains(30);
     }
+
+    @Test
+    @DisplayName("Predicate의 결합")
+    void bindPredicate() {
+        /*
+            << Predicate의 결합 >>
+            - 여러 조건식을 논리 연산자인 &&, ||, ! 등으로 연결해서 하나의 식을 구성할 수 있는 것처럼,
+              여러 Predicate를 and(), or(), negate()로 연결해서 하나의 새로운 Predicate로 결합할 수 있다
+         */
+        Predicate<Integer> lessThan100 = i -> i < 100;
+        Predicate<Integer> greaterThan50 = i -> i > 50;
+        Predicate<Integer> lessThanOrEqualTo50 = greaterThan50.negate(); // negate(),  i <= 50
+        Predicate<Integer> isBetween50And100 = greaterThan50.and(lessThan100); // and()
+        Predicate<Integer> isLessThan50or100 = lessThanOrEqualTo50.or(lessThan100); // or()
+
+        assertThat(lessThanOrEqualTo50.test(30)).isTrue();
+        assertThat(isBetween50And100.test(30)).isFalse();
+        assertThat(isBetween50And100.test(70)).isTrue();
+        assertThat(isLessThan50or100.test(150)).isFalse();
+    }
 }
