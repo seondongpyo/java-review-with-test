@@ -1,6 +1,5 @@
 package stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,6 @@ import java.util.Random;
 import java.util.stream.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.setExtractBareNamePropertyMethods;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StreamTest {
@@ -102,5 +100,37 @@ class StreamTest {
         assertThat(intStream1).hasSize(4).doesNotContain(5);
         assertThat(intStream2).hasSize(5).contains(10);
         intStream3.forEach(i -> assertThat(i).isLessThan(5));
+    }
+
+    @Test
+    @DisplayName("스트림 만들기 - 람다식 iterate()")
+    void iterate() {
+        /*
+            << iterate() >>
+            - 첫 번째 매개변수인 seed로 지정된 값부터 시작해서,
+              두 번째 매개변수로 전달된 람다식에 의해 계산된 결과를 다시 seed값으로 하여 계산을 반복한다
+         */
+        
+        // 0부터 2씩 계속 증가하는 값들을 가진 무한 스트림 반환
+        Stream<Integer> evenStream = Stream.iterate(0, n -> n + 2);
+
+        evenStream.limit(10).forEach(number -> {
+            assertThat(number % 2).isZero();
+        });
+    }
+
+    @Test
+    @DisplayName("스트림 만들기 - 람다식 generate()")
+    void generate() {
+        /*
+            << generate() >>
+            - iterate()처럼 람다식에 의해 계산되는 값을 요소로 하는 무한 스트림을 반환하나,
+              이전 결과를 이용해서 다음 요소를 계산하지 않는다
+         */
+        Stream<Integer> hundredStream = Stream.generate(() -> 100);
+
+        hundredStream.limit(10).forEach(number -> {
+            assertThat(number).isEqualTo(100);
+        });
     }
 }
