@@ -3,6 +3,11 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -132,5 +137,23 @@ class StreamTest {
         hundredStream.limit(10).forEach(number -> {
             assertThat(number).isEqualTo(100);
         });
+    }
+
+    @Test
+    @DisplayName("스트림 만들기 - 파일 스트림")
+    void streamFile() throws Exception {
+        // 지정된 디렉토리(dir)에 있는 파일의 목록을 소스로 하는 스트림을 반환
+        Stream<Path> fileStream = Files.list(Paths.get("file/"));
+
+        assertThat(fileStream).hasSize(4);
+    }
+
+    @Test
+    @DisplayName("스트림 만들기 - 빈 스트림")
+    void streamEmpty() {
+        Stream<Object> emptyStream = Stream.empty();
+
+        assertThat(emptyStream).isEmpty();
+        assertThat(Stream.empty()).isEmpty();
     }
 }
