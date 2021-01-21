@@ -3,8 +3,6 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -155,5 +153,54 @@ class StreamTest {
 
         assertThat(emptyStream).isEmpty();
         assertThat(Stream.empty()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("스트림의 연산 - distinct")
+    void stream_distinct() {
+        String[] stringArray = {"bb", "cc", "aa", "bb"};
+        Stream<String> stream = Stream.of(stringArray);
+        Stream<String> distinctStream = stream.distinct(); // 중복 제거
+
+        assertThat(distinctStream).hasSize(3);
+    }
+
+    @Test
+    @DisplayName("스트림의 연산 - sorted")
+    void stream_sorted() {
+        String[] stringArray = {"bb", "cc", "aa"};
+        Stream<String> stream = Stream.of(stringArray);
+        Stream<String> sortedStream = stream.sorted();
+
+        assertThat(sortedStream).containsExactly("aa", "bb", "cc");
+    }
+
+    @Test
+    @DisplayName("스트림의 연산 - limit")
+    void stream_limit() {
+        String[] stringArray = {"aa", "bb", "cc", "dd", "ee", "ff"};
+        Stream<String> stream = Stream.of(stringArray);
+        Stream<String> limitStream = stream.limit(4);
+
+        assertThat(limitStream).hasSize(4).containsExactly("aa", "bb", "cc", "dd");
+    }
+
+    @Test
+    @DisplayName("스트림의 연산 - count")
+    void stream_count() {
+        String[] stringArray = {"aa", "bb", "cc", "dd", "ee", "ff", "gg"};
+        Stream<String> stream = Stream.of(stringArray);
+
+        assertThat(stream.count()).isEqualTo(7);
+    }
+
+    @Test
+    @DisplayName("스트림의 연산 - filter")
+    void stream_filter() {
+        String[] stringArray = {"apple", "kiwi", "banana", "melon", "mango", "plum"};
+        Stream<String> stream = Stream.of(stringArray);
+        Stream<String> filteredStream = stream.filter(s -> s.contains("a")); // "a"가 포함되지 않은 요소는 제외
+
+        assertThat(filteredStream).hasSize(3).containsExactly("apple", "banana", "mango");
     }
 }
