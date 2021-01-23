@@ -1,10 +1,11 @@
 package stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,5 +53,36 @@ class StreamIntermediateOperationTest {
         IntStream distinctStream = intStream.distinct();
 
         assertThat(distinctStream).hasSize(5).containsExactly(1, 2, 3, 4, 5);
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - sorted")
+    void stream_sorted() {
+        IntStream intStream = IntStream.of(1, 4, 3, 5, 2);
+        Stream<String> stringStream = Stream.of("a", "c", "b", "C", "A", "B");
+
+        // sorted() - 스트림 요소의 기본 정렬 기준으로 정렬함 (단, 요소가 Comparable을 구현한 클래스가 아니라면 예외 발생)
+        IntStream sortedIntStream = intStream.sorted();
+        Stream<String> sortedStringStream = stringStream.sorted();
+
+        assertThat(sortedIntStream).containsExactly(1, 2, 3, 4, 5); // 오름차순 정렬
+        assertThat(sortedStringStream).containsExactly("A", "B", "C", "a", "b", "c"); // 사전 순으로 정렬
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - sorted(Comparator c)")
+    void stream_sorted_comparable() {
+        Stream<String> stringStream1 = Stream.of("aa", "cc", "bb", "CC", "AA", "BB");
+        Stream<String> stringStream2 = Stream.of("aa", "cc", "bb", "CC", "AA", "BB");
+        Stream<String> stringStream3 = Stream.of("ddd", "f", "zz", "eee", "aaaa");
+
+        // sorted(Comparator c) - 스트림을 지정된 Comparator로 정렬
+        Stream<String> reverseOrdered = stringStream1.sorted(Comparator.reverseOrder()); // 기본 정렬 역순
+        Stream<String> caseInsensitiveOrdered = stringStream2.sorted(String.CASE_INSENSITIVE_ORDER); // 대소문자를 구분하지 않음
+        Stream<String> orderedByLength = stringStream3.sorted(Comparator.comparing(String::length)); // 길이가 짧은 순서대로 정렬
+
+        assertThat(reverseOrdered).containsExactly("cc", "bb", "aa", "CC", "BB", "AA");
+        assertThat(caseInsensitiveOrdered).containsExactly("aa", "AA", "bb", "BB", "cc", "CC");
+        assertThat(orderedByLength).containsExactly("f", "zz", "ddd", "eee", "aaaa");
     }
 }
