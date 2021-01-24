@@ -85,4 +85,88 @@ class StreamIntermediateOperationTest {
         assertThat(caseInsensitiveOrdered).containsExactly("aa", "AA", "bb", "BB", "cc", "CC");
         assertThat(orderedByLength).containsExactly("f", "zz", "ddd", "eee", "aaaa");
     }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - Comparator의 comparing()")
+    void stream_comparator_comparing() {
+        Stream<Student> studentStream = Stream.of(
+                new Student("홍길동", 1, 100),
+                new Student("백길동", 3, 190),
+                new Student("박길동", 2, 160),
+                new Student("천길동", 3, 110),
+                new Student("김길동", 1, 140),
+                new Student("최길동", 1, 120),
+                new Student("황길동", 2, 150),
+                new Student("이길동", 3, 180),
+                new Student("노길동", 2, 200)
+        );
+
+        Stream<Student> sortedByBan = studentStream.sorted(Comparator.comparing(Student::getBan)); // 반별 정렬
+        sortedByBan.limit(3).forEach(student -> assertThat(student.getBan()).isEqualTo(1));
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - Comparator의 thenComparing()")
+    void stream_comparator_thenComparing() {
+        Student hong = new Student("홍길동", 1, 100);
+        Student baek = new Student("백길동", 3, 190);
+        Student park = new Student("박길동", 2, 160);
+        Student cheon = new Student("천길동", 3, 110);
+        Student kim = new Student("김길동", 1, 140);
+        Student choi = new Student("최길동", 1, 120);
+        Student hwang = new Student("황길동", 2, 150);
+        Student lee = new Student("이길동", 3, 180);
+        Student noh = new Student("노길동", 2, 200);
+
+        Student[] students = {hong, baek, park, cheon, kim, choi, hwang, lee, noh};
+
+        Stream<Student> studentStream = Stream.of(students);
+
+        Stream<Student> sortedStudentStream
+                = studentStream.sorted(Comparator.comparing(Student::getBan) // 반별 정렬
+                                        .thenComparing(Student::getTotalScore)); // 총점 정렬
+        
+        // 반별 오름차순으로 먼저 정렬 후, 총점 오름차순으로 정렬
+        // => 1반부터 3반 순으로 정렬하고, 각 반 내에서 성적이 낮은 순부터 높은 순으로 정렬함
+        assertThat(sortedStudentStream).containsExactly(hong, choi, kim, hwang, park, noh, cheon, lee, baek);
+    }
+
+    static class Student implements Comparable<Student> {
+        String name;
+        int ban;
+        int totalScore;
+
+        public Student(String name, int ban, int totalScore) {
+            this.name = name;
+            this.ban = ban;
+            this.totalScore = totalScore;
+        }
+
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "name='" + name + '\'' +
+                    ", ban=" + ban +
+                    ", totalScore=" + totalScore +
+                    '}';
+        }
+
+        // 총점 내림차순을 기본 정렬로 한다
+        @Override
+        public int compareTo(Student student) {
+            return student.totalScore - this.totalScore;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getBan() {
+            return ban;
+        }
+
+        public int getTotalScore() {
+            return totalScore;
+        }
+    }
 }
