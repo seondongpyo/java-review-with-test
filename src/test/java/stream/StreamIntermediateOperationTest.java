@@ -3,7 +3,10 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -129,6 +132,28 @@ class StreamIntermediateOperationTest {
         // 반별 오름차순으로 먼저 정렬 후, 총점 오름차순으로 정렬
         // => 1반부터 3반 순으로 정렬하고, 각 반 내에서 성적이 낮은 순부터 높은 순으로 정렬함
         assertThat(sortedStudentStream).containsExactly(hong, choi, kim, hwang, park, noh, cheon, lee, baek);
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - map")
+    void stream_map() {
+        Stream<File> fileStream = Stream.of(
+            new File("/file/house1.jpg"),
+            new File("/file/house2.jpg"),
+            new File("/file/house3.jpg"),
+            new File("/file/house4.jpg")
+        );
+
+        // map : 스트림의 요소에 저장된 값 중에서 원하는 필드만 뽑아내거나 특정 형태로 변환해야 하는 경우 사용
+        Stream<String> filenameStream = fileStream.map(File::getName);
+        List<String> filenameList = new ArrayList<>();
+        
+        // 파일의 이름만 뽑아서 리스트에 저장
+        filenameStream.forEach(filenameList::add);
+
+        assertThat(filenameList).hasSize(4);
+
+        assertThat(filenameList).containsExactly("house1.jpg", "house2.jpg", "house3.jpg", "house4.jpg");
     }
 
     static class Student implements Comparable<Student> {
