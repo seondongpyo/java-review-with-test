@@ -152,8 +152,32 @@ class StreamIntermediateOperationTest {
         filenameStream.forEach(filenameList::add);
 
         assertThat(filenameList).hasSize(4);
-
         assertThat(filenameList).containsExactly("house1.jpg", "house2.jpg", "house3.jpg", "house4.jpg");
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - peek")
+    void stream_peek() {
+        List<String> fileExtensionList = new ArrayList<>();
+        Stream<File> fileStream = Stream.of(
+                new File("/file/test.txt"),
+                new File("/file/test.bak"),
+                new File("/file/test.js"),
+                new File("/file/test.html")
+        );
+
+        // peek : 연산과 연산 사이에 올바르게 처리되었는지 확인하고 싶은 경우
+        Stream<String> fileExtensionStream
+                = fileStream.map(File::getName)
+                            .peek(s -> System.out.println("filename = " + s)) // 파일명 출력
+                            .map(s -> s.substring(s.indexOf(".") + 1)) // 확장자만 추출
+                            .peek(s -> System.out.println("extension = " + s)); // 확장자 출력
+
+        // 파일의 확장자만 뽑아서 리스트에 저장
+        fileExtensionStream.forEach(fileExtensionList::add);
+
+        assertThat(fileExtensionList).hasSize(4);
+        assertThat(fileExtensionList).containsExactly("txt", "bak", "js", "html");
     }
 
     static class Student implements Comparable<Student> {
