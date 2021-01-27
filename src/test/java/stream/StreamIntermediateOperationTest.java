@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -178,6 +179,24 @@ class StreamIntermediateOperationTest {
 
         assertThat(fileExtensionList).hasSize(4);
         assertThat(fileExtensionList).containsExactly("txt", "bak", "js", "html");
+    }
+
+    @Test
+    @DisplayName("스트림의 중간연산 - flatMap")
+    void stream_flatMap() {
+        Stream<String[]> stringArrayStream = Stream.of(
+                new String[]{"apple", "banana", "tomato"},
+                new String[]{"Banana", "Melon", "Apple"}
+        );
+
+        // 각 요소의 문자열들을 합쳐서 문자열이 요소인 스트림을 생성
+        Stream<String> stringStream = stringArrayStream.flatMap(Arrays::stream);
+
+        Stream<String> sortedStream = stringStream.map(String::toLowerCase)
+                                                .distinct()
+                                                .sorted();
+
+        assertThat(sortedStream).hasSize(4).containsExactly("apple", "banana", "melon", "tomato");
     }
 
     static class Student implements Comparable<Student> {
