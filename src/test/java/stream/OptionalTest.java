@@ -30,9 +30,18 @@ public class OptionalTest {
     @Test
     @DisplayName("Optional.ofNullable")
     void optional_ofNullable() {
-        // Optional.ofNullable() - 매개변수가 null일 가능성이 있으면 of() 대신 ofNullable()을 사용해야 한다
+        // Optional.ofNullable() - 참조변수의 값이 null일 가능성이 있으면 of() 대신 ofNullable()을 사용해야 한다
         Optional<String> optionalOfNullable = getOptionalOfNullable(null);
         assertThat(optionalOfNullable).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Optional.empty")
+    void optional_empty() {
+        // Optional.empty() - Optional<T> 타입의 참조변수를 기본값으로 초기화할 때 사용, null로 초기화하는 것보다 바람직함
+        Optional<String> emptyOptional = Optional.empty();
+
+        assertThat(emptyOptional).isEmpty();
     }
 
     public Optional<String> getOptionalOf(String value) {
