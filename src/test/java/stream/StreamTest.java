@@ -141,7 +141,7 @@ class StreamTest {
     @DisplayName("스트림 만들기 - 파일 스트림")
     void streamFile() throws Exception {
         // 지정된 디렉토리(dir)에 있는 파일의 목록을 소스로 하는 스트림을 반환
-        Stream<Path> fileStream = Files.list(Paths.get("file/"));
+        Stream<Path> fileStream = Files.list(Paths.get("file/image/"));
 
         assertThat(fileStream).hasSize(4);
     }
