@@ -3,6 +3,7 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -60,8 +61,8 @@ public class StreamFinalOperationTest {
     }
 
     @Test
-    @DisplayName("스트림의 최종연산 - reduce")
-    void stream_reduce() {
+    @DisplayName("스트림의 최종연산 - reduce (1)")
+    void stream_reduce_1() {
         String[] strArr = {"Inheritance", "Lambda", "Stream", "Optional"};
 
         // Stream<String[]> -> IntStream
@@ -75,6 +76,24 @@ public class StreamFinalOperationTest {
 
         assertThat(result1).isEqualTo(4); // 1 + 1 + 1 + 1
         assertThat(result2).isEqualTo(31); // 11 + 6 + 6 + 8
+    }
+
+    @Test
+    @DisplayName("스트림의 최종연산 - reduce (2)")
+    void stream_reduce_2() {
+        String[] strArr = {"Byte", "Short", "Integer", "Long", "Float", "Double"};
+
+        // Stream<String[]> -> IntStream
+        IntStream intStream1 = Stream.of(strArr).mapToInt(String::length);
+        IntStream intStream2 = Stream.of(strArr).mapToInt(String::length);
+
+        OptionalInt maxValue = intStream1.reduce(Integer::max); // 최대값
+        OptionalInt minValue = intStream2.reduce(Integer::min); // 최소값
+
+        assertThat(maxValue).isPresent();
+        assertThat(maxValue.getAsInt()).isEqualTo(7);
+        assertThat(minValue).isPresent();
+        assertThat(minValue.getAsInt()).isEqualTo(4);
     }
 
     static class Student {
