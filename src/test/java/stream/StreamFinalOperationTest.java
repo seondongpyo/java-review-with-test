@@ -3,6 +3,7 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,6 +57,24 @@ public class StreamFinalOperationTest {
         boolean nobodyGetGradeA = studentStream.noneMatch(student -> student.getScore() > 90);
 
         assertThat(nobodyGetGradeA).isTrue();
+    }
+
+    @Test
+    @DisplayName("스트림의 최종연산 - reduce")
+    void stream_reduce() {
+        String[] strArr = {"Inheritance", "Lambda", "Stream", "Optional"};
+
+        // Stream<String[]> -> IntStream
+        IntStream intStream1 = Stream.of(strArr).mapToInt(String::length);
+        IntStream intStream2 = Stream.of(strArr).mapToInt(String::length);
+
+        // reduce('초기값', '처리할 연산') - 스트림의 요소를 줄여나가면서 연산을 수행하고 최종 결과를 반환
+        // 초기값은 a에 저장됨
+        int result1 = intStream1.reduce(0, (a, b) -> a + 1); // 초기값 0부터 1씩 더하기
+        int result2 = intStream2.reduce(0, (a, b) -> a + b); // 초기값 0부터 모든 스트림의 요소를 더하기
+
+        assertThat(result1).isEqualTo(4); // 1 + 1 + 1 + 1
+        assertThat(result2).isEqualTo(31); // 11 + 6 + 6 + 8
     }
 
     static class Student {
