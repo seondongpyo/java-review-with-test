@@ -3,7 +3,11 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -94,6 +98,45 @@ public class StreamFinalOperationTest {
         assertThat(maxValue.getAsInt()).isEqualTo(7);
         assertThat(minValue).isPresent();
         assertThat(minValue.getAsInt()).isEqualTo(4);
+    }
+
+    @Test
+    @DisplayName("스트림의 최종연산 - collect(Collectors.toList())")
+    void stream_collect_toList() {
+        Stream<Student> studentStream = getStudentStream();
+
+        // collect(Collectors.toList()) : 스트림을 컬렉션으로 변환
+        List<String> studentNameList
+                = studentStream.map(Student::getName).collect(Collectors.toList());
+
+        assertThat(studentNameList).hasSize(5);
+        assertThat(studentNameList).containsExactly("홍길동", "김길동", "박길동", "이길동", "최길동");
+    }
+
+    @Test
+    @DisplayName("스트림의 최종연산 - collect(Collectors.toCollection())")
+    void stream_collect_toCollection() {
+        Stream<Student> studentStream = getStudentStream();
+
+        // collect(Collectors.toCollection()) : 스트림을 특정 컬렉션으로 변환
+        HashSet<Integer> studentScoreSet
+                = studentStream.map(Student::getScore).collect(Collectors.toCollection(HashSet::new));
+
+        assertThat(studentScoreSet).contains(87, 72, 54, 78, 66);
+    }
+
+    @Test
+    @DisplayName("스트림의 최종연산 - collect(Collectors.toMap())")
+    void stream_collect_toMap() {
+        Stream<Student> studentStream = getStudentStream();
+
+        // collect(Collectors.toMap())
+        // : 스트림을 Map으로 변환하되, Map은 키와 값의 쌍으로 저장해야 하므로 키와 값으로 사용할 값을 지정해야 한다
+        Map<String, Integer> studentMap
+                = studentStream.collect(Collectors.toMap(Student::getName, Student::getScore));
+
+        assertThat(studentMap).containsOnlyKeys("홍길동", "김길동", "박길동", "이길동", "최길동");
+        assertThat(studentMap).containsValues(87, 72, 54, 78, 66);
     }
 
     static class Student {
