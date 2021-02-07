@@ -139,6 +139,19 @@ public class StreamFinalOperationTest {
         assertThat(studentMap).containsValues(87, 72, 54, 78, 66);
     }
 
+    @Test
+    @DisplayName("스트림의 최종연산 - toArray")
+    void stream_toArray() {
+        Stream<Student> studentStream = getStudentStream();
+
+        // toArray() : 스트림에 저장된 요소들을 배열로 변환, 단 해당 타입의 생성자 참조를 매개변수로 전달해야 함
+        Student[] studentArray = studentStream.toArray(Student[]::new);
+
+        assertThat(studentArray).hasSize(5);
+        assertThat(studentArray).allMatch(student -> student.getName().endsWith("길동"));
+        assertThat(studentArray).allMatch(student -> student.getScore() < 90);
+    }
+
     static class Student {
         String name;
         int score;
