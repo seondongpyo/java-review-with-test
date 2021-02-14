@@ -3,10 +3,7 @@ package stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -150,6 +147,46 @@ public class StreamFinalOperationTest {
         assertThat(studentArray).hasSize(5);
         assertThat(studentArray).allMatch(student -> student.getName().endsWith("길동"));
         assertThat(studentArray).allMatch(student -> student.getScore() < 90);
+    }
+
+    @Test
+    @DisplayName("스트림의 통계 - counting, summingInt, maxBy, summarizingInt")
+    void stream_statistics() {
+        Stream<Student> studentStream1 = getStudentStream();
+        Stream<Student> studentStream2 = getStudentStream();
+        Stream<Student> studentStream3 = getStudentStream();
+        Stream<Student> studentStream4 = getStudentStream();
+        Stream<Student> studentStream5 = getStudentStream();
+        Stream<Student> studentStream6 = getStudentStream();
+        Stream<Student> studentStream7 = getStudentStream();
+        Stream<Student> studentStream8 = getStudentStream();
+
+        // Collectors.counting() : count()와 동일
+        Long count1 = studentStream1.collect(Collectors.counting());
+        Long count2 = studentStream2.count();
+
+        // Collectors.summingInt() : mapToInt().sum()과 동일
+        Integer score1 = studentStream3.collect(Collectors.summingInt(Student::getScore));
+        Integer score2 = studentStream4.mapToInt(Student::getScore).sum();
+
+        // Collectors.maxBy() : max()와 동일
+        Optional<Student> student1 = studentStream5.collect(Collectors.maxBy(Comparator.comparingInt(Student::getScore)));
+        Optional<Student> student2 = studentStream6.max(Comparator.comparingInt(Student::getScore));
+
+        // Collectors.summarizingInt() : mapToInt().summaryStatistics()와 동일
+        IntSummaryStatistics statistics1 = studentStream7.collect(Collectors.summarizingInt(Student::getScore));
+        IntSummaryStatistics statistics2 = studentStream8.mapToInt(Student::getScore).summaryStatistics();
+
+        assertThat(count1).isEqualTo(count2).isEqualTo(5L);
+        assertThat(score1).isEqualTo(score2).isEqualTo(357);
+        assertThat(student1.isPresent()).isTrue();
+        assertThat(student2.isPresent()).isTrue();
+        assertThat(student1.get().getName()).isEqualTo(student2.get().getName());
+        assertThat(statistics1.getMin()).isEqualTo(statistics2.getMin());
+        assertThat(statistics1.getMax()).isEqualTo(statistics2.getMax());
+        assertThat(statistics1.getSum()).isEqualTo(statistics2.getSum());
+        assertThat(statistics1.getAverage()).isEqualTo(statistics2.getAverage());
+        assertThat(statistics1.getCount()).isEqualTo(statistics2.getCount());
     }
 
     static class Student {
