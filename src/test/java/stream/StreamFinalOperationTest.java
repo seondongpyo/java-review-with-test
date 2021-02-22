@@ -202,6 +202,26 @@ public class StreamFinalOperationTest {
         assertThat(totalScore1).isEqualTo(totalScore2).isEqualTo(357);
     }
 
+    @Test
+    @DisplayName("스트림을 문자열로 결합 - joining")
+    void stream_joining() {
+        Stream<Student> studentStream1 = getStudentStream();
+        Stream<Student> studentStream2 = getStudentStream();
+        Stream<Student> studentStream3 = getStudentStream();
+
+        // Collectors.joining() : 문자열 스트림의 모든 요소를 하나의 문자열로 연결해서 반환
+        // 구분자, 접두사, 접미사도 지정 가능
+        String studentNames1 = studentStream1.map(Student::getName).collect(Collectors.joining());
+        String studentNames2 = studentStream2.map(Student::getName)
+                                    .collect(Collectors.joining("|")); // 구분자 지정
+        String studentNames3 = studentStream3.map(Student::getName)
+                                    .collect(Collectors.joining(" ", "<<", ">>"));// 구분자, 접두사, 접미사 지정
+
+        assertThat(studentNames1).isEqualTo("홍길동김길동박길동이길동최길동");
+        assertThat(studentNames2).isEqualTo("홍길동|김길동|박길동|이길동|최길동");
+        assertThat(studentNames3).isEqualTo("<<홍길동 김길동 박길동 이길동 최길동>>");
+    }
+
     static class Student {
         String name;
         int score;
