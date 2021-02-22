@@ -189,6 +189,19 @@ public class StreamFinalOperationTest {
         assertThat(statistics1.getCount()).isEqualTo(statistics2.getCount());
     }
 
+    @Test
+    @DisplayName("스트림을 리듀싱 - reducing")
+    void stream_reducing() {
+        Stream<Student> studentStream1 = getStudentStream();
+        Stream<Student> studentStream2 = getStudentStream();
+
+        // Collectors.reducing() : map().reduce()와 동일
+        Integer totalScore1 = studentStream1.map(Student::getScore).reduce(0, Integer::sum);
+        Integer totalScore2 = studentStream2.collect(Collectors.reducing(0, Student::getScore, Integer::sum));
+
+        assertThat(totalScore1).isEqualTo(totalScore2).isEqualTo(357);
+    }
+
     static class Student {
         String name;
         int score;
