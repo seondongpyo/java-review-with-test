@@ -14,11 +14,28 @@ public class StreamFinalOperationTest {
 
     Stream<Student> getStudentStream() {
         return Stream.of(
-                new Student("홍길동", 87),
-                new Student("김길동", 72),
-                new Student("박길동", 54),
-                new Student("이길동", 78),
-                new Student("최길동", 66)
+                new Student("홍길동", 87, true),
+                new Student("김길동", 72, true),
+                new Student("박길동", 54, true),
+                new Student("이길동", 78, true),
+                new Student("최길동", 66, true)
+        );
+    }
+    
+    Stream<Student> getNewStudentStream() {
+        return Stream.of(
+                new Student("홍길동", 87, true),
+                new Student("김길동", 72, true),
+                new Student("박길동", 54, true),
+                new Student("이길동", 78, true),
+                new Student("최길동", 66, true),
+                new Student("김영미", 97, false),
+                new Student("이영미", 84, false),
+                new Student("박영미", 71, false),
+                new Student("최영미", 68, false),
+                new Student("한영미", 55, false),
+                new Student("남영미", 43, false),
+                new Student("주영미", 91, false)
         );
     }
 
@@ -215,20 +232,97 @@ public class StreamFinalOperationTest {
         String studentNames2 = studentStream2.map(Student::getName)
                                     .collect(Collectors.joining("|")); // 구분자 지정
         String studentNames3 = studentStream3.map(Student::getName)
-                                    .collect(Collectors.joining(" ", "<<", ">>"));// 구분자, 접두사, 접미사 지정
+                                    .collect(Collectors.joining(" ", "<<", ">>")); // 구분자, 접두사, 접미사 지정
 
         assertThat(studentNames1).isEqualTo("홍길동김길동박길동이길동최길동");
         assertThat(studentNames2).isEqualTo("홍길동|김길동|박길동|이길동|최길동");
         assertThat(studentNames3).isEqualTo("<<홍길동 김길동 박길동 이길동 최길동>>");
     }
 
+    @Test
+    @DisplayName("스트림의 분할 - partitioningBy 1")
+    void stream_partitioningBy_1() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // Collectors.partitionBy() : 스트림의 요소를 전달된 Predicate에 따라 분할
+        // 기본 분할 - 학생들을 성별로 분할
+        Map<Boolean, List<Student>> studentByGender
+                = studentStream.collect(Collectors.partitioningBy(Student::isMale));
+
+        List<Student> maleStudent = studentByGender.get(true);
+        List<Student> femaleStudent = studentByGender.get(false);
+
+        assertThat(maleStudent).hasSize(5);
+        assertThat(femaleStudent).hasSize(7);
+    }
+    
+    @Test
+    @DisplayName("스트림의 분할 - partitioningBy 2")
+    void stream_partitioningBy_2() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // 기본 분할 + 통계 정보 : 성별로 분할된 학생의 수를 계산
+        Map<Boolean, Long> studentNumberByGender
+                = studentStream.collect(Collectors.partitioningBy(Student::isMale, Collectors.counting()));
+
+        Long maleStudentNumber = studentNumberByGender.get(true); // 남학생의 수
+        Long femaleStudentNumber = studentNumberByGender.get(false); // 여학생의 수
+
+        assertThat(maleStudentNumber).isEqualTo(5);
+        assertThat(femaleStudentNumber).isEqualTo(7);
+    }
+
+    @Test
+    @DisplayName("스트림의 분할 - partitioningBy 3")
+    void student_partitioningBy_3() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // 기본 분할 + 통계 정보 : 성별별 1등 구하기
+        Map<Boolean, Optional<Student>> topScorerByGender
+                = studentStream.collect(Collectors.partitioningBy(Student::isMale,
+                                        Collectors.maxBy(Comparator.comparingInt(Student::getScore))));
+
+        Optional<Student> topMaleScorer = topScorerByGender.get(true);
+        Optional<Student> topFemaleScorer = topScorerByGender.get(false);
+
+        assertThat(topMaleScorer.isPresent()).isTrue();
+        assertThat(topFemaleScorer.isPresent()).isTrue();
+        assertThat(topMaleScorer.get().getName()).isEqualTo("홍길동");
+        assertThat(topMaleScorer.get().getScore()).isEqualTo(87);
+        assertThat(topFemaleScorer.get().getName()).isEqualTo("김영미");
+        assertThat(topFemaleScorer.get().getScore()).isEqualTo(97);
+    }
+    
+    @Test
+    @DisplayName("스트림의 분할 - partitioningBy 4")
+    void stream_partitioningBy_4() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // 60점 미만인 학생들을 구하기
+        Map<Boolean, Map<Boolean, List<Student>>> failedStudentByGender
+                = studentStream.collect(Collectors.partitioningBy(Student::isMale,
+                                        Collectors.partitioningBy(student -> student.getScore() < 60)));
+
+        List<Student> failedMaleStudents = failedStudentByGender.get(true).get(true);
+        List<Student> failedFemaleStudents = failedStudentByGender.get(false).get(true);
+        String failedMaleStudentNames = failedMaleStudents.stream().map(Student::getName).collect(Collectors.joining(","));
+        String failedFemaleStudentNames = failedFemaleStudents.stream().map(Student::getName).collect(Collectors.joining(","));
+        
+        assertThat(failedMaleStudents).hasSize(1);
+        assertThat(failedFemaleStudents).hasSize(2);
+        assertThat(failedMaleStudentNames).isEqualTo("박길동");
+        assertThat(failedFemaleStudentNames).isEqualTo("한영미,남영미");
+    }
+
     static class Student {
         String name;
         int score;
+        boolean isMale;
 
-        public Student(String name, int score) {
+        public Student(String name, int score, boolean isMale) {
             this.name = name;
             this.score = score;
+            this.isMale = isMale;
         }
 
         public String getName() {
@@ -237,6 +331,10 @@ public class StreamFinalOperationTest {
 
         public int getScore() {
             return score;
+        }
+
+        public boolean isMale() {
+            return isMale;
         }
     }
 }
