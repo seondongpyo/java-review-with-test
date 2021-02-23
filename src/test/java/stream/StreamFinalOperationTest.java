@@ -9,33 +9,34 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class StreamFinalOperationTest {
 
     Stream<Student> getStudentStream() {
         return Stream.of(
-                new Student("홍길동", 87, true),
-                new Student("김길동", 72, true),
-                new Student("박길동", 54, true),
-                new Student("이길동", 78, true),
-                new Student("최길동", 66, true)
+                new Student("홍길동", 87, true, 1),
+                new Student("김길동", 72, true, 1),
+                new Student("박길동", 54, true, 2),
+                new Student("이길동", 78, true, 2),
+                new Student("최길동", 66, true, 3)
         );
     }
     
     Stream<Student> getNewStudentStream() {
         return Stream.of(
-                new Student("홍길동", 87, true),
-                new Student("김길동", 72, true),
-                new Student("박길동", 54, true),
-                new Student("이길동", 78, true),
-                new Student("최길동", 66, true),
-                new Student("김영미", 97, false),
-                new Student("이영미", 84, false),
-                new Student("박영미", 71, false),
-                new Student("최영미", 68, false),
-                new Student("한영미", 55, false),
-                new Student("남영미", 43, false),
-                new Student("주영미", 91, false)
+                new Student("홍길동", 87, true, 1),
+                new Student("김길동", 72, true, 1),
+                new Student("박길동", 54, true, 2),
+                new Student("이길동", 78, true, 2),
+                new Student("최길동", 66, true, 3),
+                new Student("김영미", 97, false, 1),
+                new Student("이영미", 84, false, 1),
+                new Student("박영미", 71, false, 2),
+                new Student("최영미", 68, false, 2),
+                new Student("한영미", 55, false, 2),
+                new Student("남영미", 43, false, 3),
+                new Student("주영미", 91, false, 3)
         );
     }
 
@@ -314,15 +315,87 @@ public class StreamFinalOperationTest {
         assertThat(failedFemaleStudentNames).isEqualTo("한영미,남영미");
     }
 
+    @Test
+    @DisplayName("스트림의 그룹화 - groupingBy 1")
+    void stream_groupingBy_1() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // Collectors.groupingBy() : 스트림의 요소를 전달된 Function에 따라 그룹화
+        // 학생들을 학년별로 그룹화
+        Map<Integer, List<Student>> studentsByYear 
+                = studentStream.collect(Collectors.groupingBy(Student::getYear, Collectors.toList())); // Collectors.toList()는 생략 가능
+
+        List<Student> firstYearStudents = studentsByYear.get(1);
+        List<Student> secondYearStudents = studentsByYear.get(2);
+        List<Student> thirdYearStudents = studentsByYear.get(3);
+        List<String> firstYearStudentNames = firstYearStudents.stream().map(Student::getName).collect(Collectors.toList());
+        List<String> secondYearStudentNames = secondYearStudents.stream().map(Student::getName).collect(Collectors.toList());
+        List<String> thirdYearStudentNames = thirdYearStudents.stream().map(Student::getName).collect(Collectors.toList());
+
+        assertThat(firstYearStudents).hasSize(4);
+        assertThat(firstYearStudentNames).contains("홍길동", "김길동", "김영미", "이영미");
+        assertThat(secondYearStudents).hasSize(5);
+        assertThat(secondYearStudentNames).contains("박길동", "이길동", "박영미", "최영미", "한영미");
+        assertThat(thirdYearStudents).hasSize(3);
+        assertThat(thirdYearStudentNames).contains("최길동", "남영미", "주영미");
+    }
+
+    @Test
+    @DisplayName("스트림의 그룹화 - groupingBy 2")
+    void stream_groupingBy_2() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // 학생들을 성적별로 그룹화
+        Map<Student.Level, Long> studentByLevel = studentStream.collect(Collectors.groupingBy(student -> {
+            if (student.getScore() >= 90) {
+                return Student.Level.HIGH;
+            } else if (student.getScore() >= 70) {
+                return Student.Level.MID;
+            } else {
+                return Student.Level.LOW;
+            }
+        }, Collectors.counting()));
+
+        Long highLevelStudentNumber = studentByLevel.get(Student.Level.HIGH);
+        Long midLevelStudentNumber = studentByLevel.get(Student.Level.MID);
+        Long lowLevelStudentNumber = studentByLevel.get(Student.Level.LOW);
+
+        assertThat(highLevelStudentNumber).isEqualTo(2);
+        assertThat(midLevelStudentNumber).isEqualTo(5);
+        assertThat(lowLevelStudentNumber).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("스트림의 그룹화 - groupingBy 3")
+    void stream_groupingBy_3() {
+        Stream<Student> studentStream = getNewStudentStream();
+
+        // 학년별로 성적이 가장 우수한 학생 구하기
+        Map<Integer, Student> topStudentByYear
+                = studentStream.collect(Collectors.groupingBy(Student::getYear,
+                                        Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingInt(Student::getScore)),
+                                                                                        Optional::get)));
+
+        String firstYearTopScorer = topStudentByYear.get(1).getName();
+        String secondYearTopScorer = topStudentByYear.get(2).getName();
+        String thirdYearTopScorer = topStudentByYear.get(3).getName();
+
+        assertThat(firstYearTopScorer).isEqualTo("김영미");
+        assertThat(secondYearTopScorer).isEqualTo("이길동");
+        assertThat(thirdYearTopScorer).isEqualTo("주영미");
+    }
+
     static class Student {
         String name;
         int score;
         boolean isMale;
+        int year;
 
-        public Student(String name, int score, boolean isMale) {
+        public Student(String name, int score, boolean isMale, int year) {
             this.name = name;
             this.score = score;
             this.isMale = isMale;
+            this.year = year;
         }
 
         public String getName() {
@@ -335,6 +408,14 @@ public class StreamFinalOperationTest {
 
         public boolean isMale() {
             return isMale;
+        }
+
+        public int getYear() {
+            return year;
+        }
+
+        enum Level {
+            HIGH, MID, LOW
         }
     }
 }
