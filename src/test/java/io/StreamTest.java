@@ -3,9 +3,7 @@ package io;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -109,5 +107,82 @@ public class StreamTest {
         // temp = [2, 3], len = 2, outputSource = [0, 1, 2, 3]
         // temp = [4, 3], len = 1, outputSource = [0, 1, 2, 3, 4]
         assertThat(outputSource).containsExactly(0, 1, 2, 3, 4);
+    }
+
+    @Test
+    @DisplayName("FileInputStream과 FileOutputStream")
+    void fileInputStream_fileOutputStream() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream("./file/text/text.txt");
+            FileOutputStream fileOutputStream = new FileOutputStream("./file/text/new_text.txt");
+
+            int data;
+            while ((data = fileInputStream.read()) != -1) { // text.txt 내용을 읽어서
+                fileOutputStream.write(data); // new_text.txt 파일에 쓰기
+            }
+
+            fileInputStream.close();
+            fileOutputStream.close();
+
+        } catch (IOException e) {
+            //
+        }
+
+        File newFile = new File("./file/text/new_text.txt");
+
+        assertThat(newFile).isFile();
+        assertThat(newFile).hasContent("Hello World!");
+    }
+
+    @Test
+    @DisplayName("BufferedOutputStream 1")
+    void bufferedOutputStream_1() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("./file/text/number.txt");
+            
+            // 버퍼의 크기가 5인 BufferedOutputStream 생성
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream, 5);
+
+            for (int i = '1'; i <= '9'; i++) {
+                bufferedOutputStream.write(i); // number.txt 파일에 1부터 9까지 쓰기
+            }
+
+            fileOutputStream.close();
+
+        } catch (Exception e) {
+            //
+        }
+
+        File newFile = new File("./file/text/number.txt");
+
+        // 1부터 9까지 쓰려고 했지만, 1부터 5까지만 출력됨 -> 버퍼에 남아있는 데이터가 출력되지 못 했기 때문
+        // bufferedOutputStream.close()를 호출해야 버퍼에 남아있던 모든 내용이 출력됨
+        assertThat(newFile).hasContent("12345");
+    }
+
+    @Test
+    @DisplayName("BufferedOutputStream 2")
+    void bufferedOutputStream_2() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("./file/text/number.txt");
+
+            // 버퍼의 크기가 5인 BufferedOutputStream 생성
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream, 5);
+
+            for (int i = '1'; i <= '9'; i++) {
+                bufferedOutputStream.write(i); // number.txt 파일에 1부터 9까지 쓰기
+            }
+
+            // 보조 스트림을 사용한 경우, 기반 스트림의 close(), flush()를 호출할 필요 없이
+            // 단순히 보조 스트림의 close()를 호출해도 된다
+            bufferedOutputStream.close(); // 보조 스트림인 BufferedOutputStream의 close() 호출
+
+        } catch (Exception e) {
+            //
+        }
+
+        File newFile = new File("./file/text/number.txt");
+
+        assertThat(newFile).hasContent("123456789");
     }
 }
