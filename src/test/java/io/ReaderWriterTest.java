@@ -67,4 +67,25 @@ public class ReaderWriterTest {
         assertThat(strFromFileInputStream.toString()).isNotEqualTo("안녕하세요");
         assertThat(strFromFileReader.toString()).isEqualTo("안녕하세요");
     }
+
+    @Test
+    @DisplayName("StringReader와 StringWriter")
+    void stringReader_stringWriter() {
+        String str = "Hello World!";
+
+        StringReader stringReader = new StringReader(str);
+        StringWriter stringWriter = new StringWriter();
+
+        int data = 0;
+        try {
+            while ((data = stringReader.read()) != -1) {
+                stringWriter.write(data);
+            }
+
+        } catch (IOException e) {
+            //
+        }
+
+        assertThat(stringWriter.toString()).isEqualTo(str);
+    }
 }
