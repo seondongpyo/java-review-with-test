@@ -1,6 +1,5 @@
 package io;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -87,5 +86,29 @@ public class ReaderWriterTest {
         }
 
         assertThat(stringWriter.toString()).isEqualTo(str);
+    }
+
+    @Test
+    @DisplayName("BufferedReader와 BufferedWriter")
+    void bufferedReader_bufferedWriter() {
+        File file = new File("./file/text/hangul_text.txt");
+        StringBuilder resultStr = new StringBuilder();
+
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                resultStr.append(line);
+            }
+
+            bufferedReader.close();
+
+        } catch (IOException e) {
+            //
+        }
+
+        assertThat(resultStr.toString()).isEqualTo("안녕하세요");
     }
 }
