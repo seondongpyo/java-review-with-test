@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.util.Vector;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -184,5 +185,43 @@ public class StreamTest {
         File newFile = new File("./file/text/number.txt");
 
         assertThat(newFile).hasContent("123456789");
+    }
+    
+    @Test
+    @DisplayName("SequenceInputStream")
+    void sequenceInputStream() {
+        /*
+            << SequenceInputStream >>
+            - 여러 개의 입력 스트림을 연속적으로 연결해서 하나의 스트림으로부터 데이터를 읽는 것과 같이 처리
+            - 큰 파일을 여러 개의 작은 파일로 나누었다가 하나의 파일로 합치는 등의 작업 시 용이
+         */
+
+        byte[] intArray1 = {1, 2, 3, 4};
+        byte[] intArray2 = {5, 6, 7, 8};
+        byte[] intArray3 = {9, 0};
+
+        Vector<ByteArrayInputStream> vector = new Vector<>();
+        vector.add(new ByteArrayInputStream(intArray1));
+        vector.add(new ByteArrayInputStream(intArray2));
+        vector.add(new ByteArrayInputStream(intArray3));
+
+        SequenceInputStream sequenceInputStream = new SequenceInputStream(vector.elements());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        int data;
+
+        try {
+            while ((data = sequenceInputStream.read()) != -1) {
+                byteArrayOutputStream.write(data);
+            }
+
+        } catch (IOException e) {
+            //
+        }
+
+        byte[] outputSource = byteArrayOutputStream.toByteArray();
+
+        assertThat(outputSource).hasSize(10);
+        assertThat(outputSource).containsExactly(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
     }
 }
